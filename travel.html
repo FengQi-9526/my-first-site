@@ -2,35 +2,32 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>出行秘书 - fq-1z</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>出行秘书 - Travel Secretary</title>
+  <link rel="stylesheet" href="travel.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f5f5f5;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    #map {
-      width: 100%;
-      height: 500px;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-    }
+    #mapContainer { width: 100%; height: 300px; margin-top: 10px; }
+    #result, #weather { margin-top: 20px; padding: 10px; background: #f4f4f4; border-radius: 8px; }
+    input, button { padding: 8px; margin: 5px 0; }
   </style>
 </head>
 <body>
-  <h1>出行秘书</h1>
-  <div id="map"></div>
+  <h2>🧭 出行秘书</h2>
 
-  <!-- 高德地图 API -->
-  <script src="https://webapi.amap.com/maps?v=2.0&key=1bd27163e674d34347e9ab8bfae19ecc"></script>
-  <!-- 你的自定义 JS -->
+  <div>
+    <label>起点：</label><input type="text" id="start" placeholder="例如：广州塔">
+    <br>
+    <label>终点：</label><input type="text" id="end" placeholder="例如：广州南站">
+    <br>
+    <button onclick="searchRoute()">查询路线</button>
+  </div>
+
+  <div id="mapContainer"></div>
+  <div id="result"></div>
+  <div id="weather"></div>
+
+  <!-- 加载高德地图 JS API -->
+  <script src="https://webapi.amap.com/maps?v=2.0&key=1bd27163e674d34347e9ab8bfae19ecc&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Walking,AMap.Driving"></script>
   <script src="travel.js"></script>
 </body>
 </html>
