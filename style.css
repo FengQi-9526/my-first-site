@@ -38,11 +38,13 @@ p {
 
 /* ===================== 导航栏样式 ===================== */
 nav {
-  background: linear-gradient(to right, #4CAF50, #45a049); /* 渐变背景颜色 */
+  background: linear-gradient(to right, rgba(0, 198, 255, 0.7), rgba(0, 114, 255, 0.7)); /* 添加渐变背景颜色和透明度 */
   padding: 15px 0; /* 内边距 */
   font-size: 18px; /* 字体大小 */
   text-align: center; /* 文字居中 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+  position: relative; /* 确保背景层次正确 */
+  z-index: 10; /* 确保导航栏在最上层 */
 }
 
 nav a {
