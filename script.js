@@ -1,38 +1,72 @@
-  // 改进的页面切换函数
-    function showPage(pageId) {
-        // 获取所有页面
-        const pages = ['home', 'task', 'travel', 'study', 'advisor', 'discipline', 'studyPartner'];
+// script.js 中的 showPage 函数
+function showPage(pageId) {
+    // 获取所有页面
+    const pages = ['home', 'task', 'travel', 'study', 'advisor', 'discipline', 'studyPartner'];
+    
+    // 移除所有导航项的活动状态
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('nav-active');
+    });
+    
+    // 高亮当前导航项
+    document.getElementById(`nav-${pageId}`).classList.add('nav-active');
+    
+    // 处理页面切换
+    pages.forEach(id => {
+        const section = document.getElementById(id);
         
-        // 移除所有导航项的活动状态
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('nav-active');
-        });
-        
-        // 高亮当前导航项
-        document.getElementById(`nav-${pageId}`).classList.add('nav-active');
-        
-        // 先将所有页面标记为非活动状态
-        pages.forEach(id => {
-            const section = document.getElementById(id);
+        if (id === pageId) {
+            // 先设置为可见但不透明
+            section.style.display = 'block';
+            
+            // 强制浏览器重新计算布局
+            void section.offsetWidth;
+            
+            // 添加激活类触发动画
+            setTimeout(() => {
+                section.classList.add('active');
+            }, 10);
+        } else {
+            // 移除激活类
             section.classList.remove('active');
             
-            // 为动画准备 - 延迟隐藏
-            if (id !== pageId) {
-                setTimeout(() => {
+            // 等待动画完成后隐藏
+            setTimeout(() => {
+                if (!section.classList.contains('active')) {
                     section.style.display = 'none';
-                }, 400); // 与CSS过渡动画时间匹配
+                }
+            }, 400); // 动画持续时间
+        }
+    });
+}
+
+
+
+
+    // 预加载所有页面，减少切换时的内容加载延迟
+    document.addEventListener('DOMContentLoaded', function() {
+        // 预先计算并缓存所有section的尺寸，减少重排
+        const sections = document.querySelectorAll('.section');
+        sections.forEach(section => {
+            if (!section.classList.contains('active')) {
+                // 临时使其可见以计算尺寸
+                section.style.position = 'absolute';
+                section.style.visibility = 'hidden';
+                section.style.display = 'block';
+                section.style.opacity = '0';
+                
+                // 触发重排以计算尺寸
+                section.offsetHeight;
+                
+                // 恢复原样
+                section.style.position = '';
+                section.style.visibility = '';
+                section.style.display = '';
+                section.style.opacity = '';
             }
         });
-        
-        // 显示并激活当前页面
-        const currentPage = document.getElementById(pageId);
-        currentPage.style.display = 'block';
-        
-        // 触发重排以应用过渡动画
-        setTimeout(() => {
-            currentPage.classList.add('active');
-        }, 50);
-    }
+    });
+
 
     // 任务管理功能
     document.getElementById('taskForm').addEventListener('submit', function(event) {
