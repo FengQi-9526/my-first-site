@@ -54,6 +54,8 @@ body {
 @media (max-width: 768px) {
   html, body {
     /* 确保HTML和body元素占满整个视口 */
+    transform: translateZ(0);
+    -webkit-font-smoothing: subpixel-antialiased;
     height: 100%;
     width: 100%;
     overflow-x: hidden;
