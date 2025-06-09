@@ -1,38 +1,33 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta charset="UTF-8">
-  <title>出行秘书 - fq-1z</title>
-  <link rel="stylesheet" href="style.css">
+  <title>出行秘书</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <nav>
-    <ul>
-      <li><a href="index.html">首页</a></li>
-      <li><a href="planner.html">学习规划师</a></li>
-      <li><a href="travel.html">出行秘书</a></li>
-      <!-- 以后我们可以继续加其他功能 -->
-    </ul>
-  </nav>
-
-  <main>
-    <h1>出行秘书</h1>
-    <p>输入你的出发地与目的地，我会为你推荐路线并提供穿衣建议。</p>
-
+  <div class="container">
+    <h1>🚗 出行秘书</h1>
     <form id="travelForm">
-      <label>出发地：<input type="text" id="fromLocation" required></label><br><br>
-      <label>目的地：<input type="text" id="toLocation" required></label><br><br>
-      <label>出发时间：<input type="datetime-local" id="travelTime"></label><br><br>
+      <label for="fromLocation">出发地：</label>
+      <input type="text" id="fromLocation" required />
+
+      <label for="toLocation">目的地：</label>
+      <input type="text" id="toLocation" required />
+
+      <label for="travelTime">出发时间：</label>
+      <input type="datetime-local" id="travelTime" required />
+
       <button type="submit">查询路线</button>
     </form>
 
-    <section id="resultArea">
+    <div id="results">
       <h2>推荐结果</h2>
-      <p id="routeSuggestion">路线建议将在这里显示</p>
-      <p id="weatherAdvice">天气建议将在这里显示</p>
-    </section>
-  </main>
+      <p id="routeSuggestion">（这里将显示推荐路线）</p>
+      <p id="weatherAdvice">（这里将显示穿衣建议）</p>
+    </div>
+  </div>
 
   <script src="travel.js"></script>
 </body>
