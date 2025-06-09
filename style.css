@@ -18,29 +18,79 @@
   --transition-default: transform 0.3s ease;
 }
 
-/* ===================== 基本样式和全局设置 ===================== */
+/* 桌面设备的渐变动画 */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
-  background: linear-gradient(to right, #fc466b, #3f5efb, #43cea2, #ffb347);
+  background: linear-gradient(to right, #12c2e9, #c471ed, #f64f59);
   background-size: 400% 400%;
-  animation: gradientAnimation 10s ease infinite;
+  -webkit-animation: gradientAnimation 15s ease infinite;
+  -moz-animation: gradientAnimation 15s ease infinite;
+  animation: gradientAnimation 15s ease infinite;
   margin: 0;
   padding: 0;
 }
 
 /* 动画关键帧，控制背景渐变的运动 */
+@-webkit-keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@-moz-keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 @keyframes gradientAnimation {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-@-webkit-keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* 移动设备的样式 */
+@media (max-width: 768px) {
+  body {
+    /* 选项1: 简化的静态渐变 */
+    background: linear-gradient(45deg, #12c2e9, #f64f59);
+    background-size: 100% 100%;
+    animation: none; /* 关闭动画，节省性能 */
+    
+    /* 选项2: 更轻量的动画效果 (二选一) */
+    /*
+    background: linear-gradient(45deg, #12c2e9, #f64f59);
+    background-size: 200% 200%;
+    animation: simplifiedAnimation 8s ease infinite;
+    */
+  }
+  
+  /* 简化的动画关键帧 */
+  @keyframes simplifiedAnimation {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+  }
+  
+  /* 添加前缀 */
+  @-webkit-keyframes simplifiedAnimation {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+  }
 }
+
+/* 小型移动设备的样式 */
+@media (max-width: 480px) {
+  body {
+    /* 对于非常小的设备，完全使用静态渐变以优化性能 */
+    background: linear-gradient(45deg, #12c2e9, #c471ed, #f64f59);
+    background-size: 100% 100%;
+    animation: none;
+  }
+}
+
 
 /* ===================== 导航栏样式 ===================== */
 nav {
