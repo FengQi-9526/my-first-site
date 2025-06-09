@@ -222,7 +222,23 @@
         <div id="studyPartnerResponse">
             <!-- 回应会显示在这里 -->
         </div>
-<script src="script.js"></script>
+
+
+<script>
+    // 确保页面加载时动画状态正确
+    document.addEventListener('DOMContentLoaded', function() {
+        // 确保首页正确显示
+        document.getElementById('home').style.display = 'block';
+        
+        // 让浏览器有时间渲染初始状态
+        setTimeout(function() {
+            document.getElementById('home').classList.add('active');
+        }, 50);
+    });
+</script>
+
+<script src="script.js">
+</script>
 
 </body>
 </html>
