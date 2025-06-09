@@ -57,18 +57,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // ===================== 地图初始化 =====================
   // 创建地图实例
-  const map = new AMap.Map('mapContainer', {
-    zoom: 12,  // 初始缩放级别
-    resizeEnable: true  // 允许地图容器大小调整
-  });
-  trackApiCall('初始化地图', 1);  // 记录API调用
-  
-  // 添加地图控件（工具栏和比例尺）
-  map.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
-    map.addControl(new AMap.ToolBar());  // 添加工具栏
-    map.addControl(new AMap.Scale());    // 添加比例尺
-    trackApiCall('加载地图控件', 1);
-  });
+  const mapStatus = document.getElementById('mapStatus');
+  try {
+    const map = new AMap.Map('mapContainer', {
+      zoom: 12,
+      resizeEnable: true,
+      viewMode: '2D'  // 设置地图模式
+    });
+
+    // 地图加载完成事件
+    map.on('complete', function() {
+      mapStatus.textContent = '地图加载完成';
+      trackApiCall('初始化地图', 1);
+    });
+
+    // 地图加载失败事件
+    map.on('error', function(error) {
+      console.error('地图加载错误:', error);
+      mapStatus.textContent = '地图加载失败，请刷新页面重试';
+    });
+
+    // 添加地图控件
+    map.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+      try {
+        map.addControl(new AMap.ToolBar());
+        map.addControl(new AMap.Scale());
+        trackApiCall('加载地图控件', 1);
+      } catch (error) {
+        console.error('添加地图控件失败:', error);
+        mapStatus.textContent = '地图控件加载失败';
+      }
+    });
+
+    // 确保所有必需的插件都已加载
+    AMap.plugin([
+      'AMap.Geocoder',
+      'AMap.AutoComplete',
+      'AMap.Driving',
+      'AMap.Walking',
+      'AMap.Transfer',
+      'AMap.Riding',
+      'AMap.Weather'
+    ], function() {
+      console.log('所有插件加载完成');
+      mapStatus.textContent = '地图系统就绪';
+    });
+
+  } catch (error) {
+    console.error('地图初始化失败:', error);
+    mapStatus.textContent = '地图初始化失败，请检查网络连接';
+  }
   
   /**
    * 为输入框设置地点自动完成功能
@@ -77,13 +115,21 @@ document.addEventListener('DOMContentLoaded', function() {
   const setupAutocomplete = (inputId) => {
     AMap.plugin(['AMap.AutoComplete'], function() {
       const autoOptions = {
-        input: inputId  // 绑定输入框元素
+        input: inputId
       };
       const autoComplete = new AMap.AutoComplete(autoOptions);
-      
+
       // 当用户选中提示项时触发
       autoComplete.on('select', function(e) {
-        console.log(e.poi);  // 记录选中的位置信息
+        // 更新输入框的值
+        document.getElementById(inputId).value = e.poi.name;
+        
+        // 如果地点有详细地址，则使用详细地址
+        if (e.poi.address) {
+          document.getElementById(inputId).value += ` (${e.poi.address})`;
+        }
+        
+        console.log('已选择地点:', e.poi.name, e.poi.location);
         trackApiCall('地点自动完成', 1);
       });
     });
@@ -125,28 +171,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // 获取出发地点经纬度
     geocoder.getLocation(fromLocation, function(status, result) {
       trackApiCall('地理编码(出发地)', 2);
-      
+
       if (status === 'complete' && result.info === 'OK') {
         const startPoint = result.geocodes[0].location;
-        
+        console.log('出发地解析成功:', startPoint);
+
         // 获取目的地经纬度
         geocoder.getLocation(toLocation, function(status, result) {
           trackApiCall('地理编码(目的地)', 2);
-          
+
           if (status === 'complete' && result.info === 'OK') {
             const endPoint = result.geocodes[0].location;
-            
+            console.log('目的地解析成功:', endPoint);
+
             // 规划路线
             planRoute(startPoint, endPoint, travelMode);
-            
+
             // 同时获取天气信息并提供建议
             getWeatherAdvice(endPoint);
           } else {
-            alert('目的地地址解析失败');
+            console.error('目的地解析错误:', status, result);
+            alert('目的地地址解析失败，请检查地址是否正确并重试。错误信息：' + result.info);
           }
         });
       } else {
-        alert('出发地地址解析失败');
+        console.error('出发地解析错误:', status, result);
+        alert('出发地地址解析失败，请检查地址是否正确并重试。错误信息：' + result.info);
       }
     });
   });

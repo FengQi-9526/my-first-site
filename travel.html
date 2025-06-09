@@ -9,20 +9,43 @@
     <script src="config.js"></script>
     <!-- 高德地图API -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 确保配置已加载
-            if (!window.mapConfig || !window.mapConfig.amapKey) {
-                alert('地图配置未正确加载，请检查API密钥配置');
-                return;
+        (function() {
+            function initMap() {
+                // 确保配置已加载
+                if (!window.mapConfig || !window.mapConfig.amapKey) {
+                    document.getElementById('mapStatus').textContent = '配置加载失败，请检查API密钥设置';
+                    return;
+                }
+
+                // 加载高德地图API
+                const mapScript = document.createElement('script');
+                mapScript.src = `https://webapi.amap.com/maps?v=2.0&key=${window.mapConfig.amapKey}&plugin=${window.mapConfig.plugins.join(',')}`;
+                mapScript.async = true;
+
+                // 处理加载错误
+                mapScript.onerror = () => {
+                    document.getElementById('mapStatus').textContent = '地图加载失败，请检查网络连接';
+                    console.error('高德地图API加载失败');
+                };
+
+                // 确保 API 加载完成后再加载业务代码
+                mapScript.onload = () => {
+                    const businessScript = document.createElement('script');
+                    businessScript.src = 'travel.js';
+                    businessScript.onerror = () => console.error('业务代码加载失败');
+                    document.head.appendChild(businessScript);
+                };
+
+                document.head.appendChild(mapScript);
             }
 
-            // 加载高德地图API
-            const mapScript = document.createElement('script');
-            mapScript.src = `https://webapi.amap.com/maps?v=2.0&key=${window.mapConfig.amapKey}&plugin=${window.mapConfig.plugins.join(',')}`; 
-            mapScript.async = true;
-            mapScript.onerror = () => alert('地图加载失败，请检查网络连接');
-            document.head.appendChild(mapScript);
-        });
+            // 等待配置加载完成后初始化地图
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initMap);
+            } else {
+                initMap();
+            }
+        })();
     </script>
 </head>
 <body>
@@ -84,7 +107,6 @@
         </footer>
     </div>
 
-    <!-- 加载主要功能脚本 -->
-    <script src="travel.js"></script>
+    <!-- 加载主要功能脚本已在地图API加载完成后动态加载 -->
 </body>
 </html>
