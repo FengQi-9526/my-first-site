@@ -139,18 +139,33 @@ nav a:hover {
 }
 
 /* ===================== 添加页面过渡动画 ===================== */
+/* 添加页面过渡动画 - 优化版 */
 .section {
-  display: none;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    /* 使用 will-change 提示浏览器预先创建独立图层 */
+    will-change: opacity, transform;
+    /* 只对这两个属性做动画，避免重排 */
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+    pointer-events: none;
 }
 
 .section.active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: auto;
 }
+/* 优化版过渡动画 */
+
+
+
+
 
 /* ===================== 内容卡片通用样式 ===================== */
 .content-card {
