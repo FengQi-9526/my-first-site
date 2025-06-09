@@ -1,56 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高德地图路线查询</title>
-    <script src="https://webapi.amap.com/maps?v=2.0&key=1bd27163e674d34347e9ab8bfae19ecc"></script>
-    <style>
-        #mapContainer {
-            width: 100%;
-            height: 500px;
-        }
-        .transport-options {
-            margin: 20px 0;
-        }
-        .transport-options button {
-            margin: 5px;
-            padding: 10px;
-        }
-        .active {
-            background-color: #4CAF50;
-            color: white;
-        }
-        #routeInfo {
-            margin-top: 20px;
-        }
-        #weatherAdvice {
-            margin-top: 20px;
-            color: #555;
-        }
-    </style>
+    <title>高德地图旅行助手</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://webapi.amap.com/maps?v=2.0&key=	1bd27163e674d34347e9ab8bfae19ecc&plugin=AMap.Driving,AMap.Geocoder,AMap.ToolBar,AMap.Scale,AMap.Walking,AMap.Transfer,AMap.Riding"></script>
 </head>
 <body>
-    <div>
-        <h1>高德地图路线查询</h1>
-        <div>
-            <input type="text" id="fromLocation" placeholder="请输入起点" />
-            <input type="text" id="toLocation" placeholder="请输入终点" />
-            <button id="getRouteButton">查询路线</button>
-        </div>
-        
-        <div class="transport-options">
-            <button data-mode="driving">驾车</button>
-            <button data-mode="transit">公交</button>
-            <button data-mode="walking">步行</button>
-            <button data-mode="riding">骑行</button>
-        </div>
+    <div id="mapContainer" style="width: 100%; height: 500px;"></div>
+    <div id="mapStatus">地图加载中...</div>
 
-        <div id="mapContainer"></div>
-        <div id="routeInfo"></div>
-        <div id="weatherAdvice"></div>
-        <div id="mapStatus">地图加载中...</div>
+    <div class="travel-options">
+        <button>驾车</button>
+        <button>公交</button>
+        <button>步行</button>
+        <button>骑行</button>
     </div>
+
+    <div>
+        <input type="text" id="fromLocation" placeholder="起点">
+        <input type="text" id="toLocation" placeholder="终点">
+        <button id="getRouteButton">查询路线</button>
+    </div>
+
+    <div id="routeInfo"></div>
 
     <script src="travel.js"></script>
 </body>
