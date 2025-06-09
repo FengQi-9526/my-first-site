@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>学习规划师</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>📚 学习规划师</h1>
+    <a href="index.html">← 返回主页</a>
+  </header>
+
+  <main>
+    <section class="planner-section">
+      <h2>你想学习什么？</h2>
+      <input type="text" id="topicInput" placeholder="请输入主题，如：讲故事" />
+      <button onclick="generatePlan()">生成学习计划</button>
+
+      <div id="planResult" class="plan-card"></div>
+    </section>
+  </main>
+
+  <script src="planner.js"></script>
+</body>
+</html>
