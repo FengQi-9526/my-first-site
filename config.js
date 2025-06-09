@@ -1,27 +1,38 @@
-// 高德地图配置文件
-const config = {
-    // API密钥配置
+// 高德地图配置
+window.mapConfig = {
+    // API密钥
     amapKey: 'a5fe731067256974fd20e6bb3e49bc63',
 
+    // 插件配置
     plugins: [
-        'AMap.ToolBar',        // 工具条
-        'AMap.Scale',         // 比例尺
-        'AMap.Geocoder',      // 地理编码
-        'AMap.AutoComplete',   // 地点自动完成
-        'AMap.Driving',       // 驾车路线规划
-        'AMap.Walking',       // 步行路线规划
-        'AMap.Transit',       // 公交路线规划
-        'AMap.Riding',        // 骑行路线规划
-        'AMap.Weather'        // 天气查询
+        'AMap.ToolBar',        // 工具条控件
+        'AMap.Scale',          // 比例尺控件
+        'AMap.Geocoder',       // 地理编码服务
+        'AMap.AutoComplete',   // 地点搜索服务
+        'AMap.PlaceSearch',    // 地点详细信息查询
+        'AMap.Driving',        // 驾车路线规划
+        'AMap.Walking',        // 步行路线规划
+        'AMap.Transfer',       // 公交路线规划
+        'AMap.Riding',         // 骑行路线规划
+        'AMap.Weather'         // 天气查询服务
     ],
 
+    // 地图初始化配置
     mapOptions: {
-        zoom: 12,             // 初始缩放级别
-        resizeEnable: true,   // 允许改变地图大小
-        viewMode: '2D',       // 地图模式
-        center: [116.397428, 39.90923]  // 默认中心点（北京）
+        zoom: 12,              // 初始缩放级别
+        center: [116.397428, 39.90923],  // 初始中心点（北京）
+        resizeEnable: true,    // 是否监控地图容器尺寸变化
+        viewMode: '2D',        // 地图模式
+        lang: 'zh_cn',         // 地图语言
     },
 
+    // 路线规划配置
+    routeOptions: {
+        showTraffic: true,     // 显示实时路况
+        autoFitView: true      // 自动调整视野以显示所有标记点
+    },
+
+    // API访问限制
     apiLimits: {
         maxTokensPerDay: 1000,  // 每日最大调用次数
         tokensPerCall: {        // 每次调用消耗的token数
@@ -32,17 +43,33 @@ const config = {
         }
     },
 
-    securityDomains: [
-        'fengqi-first-site.netlify.app'  // 已添加到白名单的域名
-    ]
+    // 调试选项
+    debug: {
+        logApiCalls: true,     // 记录API调用
+        showErrors: true       // 显示详细错误信息
+    },
+
+    // 安全设置
+    security: {
+        allowedDomains: ['localhost', 'fengqi-first-site.netlify.app'],  // 允许的域名
+        useHttps: true         // 是否使用HTTPS
+    },
+
+    // 自定义样式
+    customStyle: {
+        routeColors: {
+            driving: '#0091ff',  // 驾车路线颜色
+            walking: '#28a745',  // 步行路线颜色
+            transit: '#6610f2',  // 公交路线颜色
+            riding: '#fd7e14'    // 骑行路线颜色
+        }
+    }
 };
 
-// 确保配置在不同环境中可用
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = config;  // Node.js环境
-} else {
-    window.mapConfig = config;  // 浏览器环境
-}
-
-// 验证配置是否加载
+// 验证配置加载
 console.log('地图配置已加载');
+
+// 导出配置（用于Node.js环境）
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = window.mapConfig;
+}

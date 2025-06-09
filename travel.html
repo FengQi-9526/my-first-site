@@ -3,16 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 强制HTTPS -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <!-- 禁用缓存，确保始终加载最新版本 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>交通出行规划</title>
     <link rel="stylesheet" href="style.css">
-    <!-- 配置文件 -->
-    <script src="config.js"></script>
+    
+    <!-- 这里保留之前添加的所有样式 -->
     <style>
+        /* 地图容器样式优化 */
         #mapContainer {
             width: 100%;
-            height: 400px;
+            height: 500px;  /* 增加地图高度 */
             margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
         }
+        
+        /* 响应式布局 */
+        @media (max-width: 768px) {
+            #mapContainer {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #mapContainer {
+                height: 300px;
+            }
+        }
+        
+        /* 地图控件样式 */
+        .amap-toolbar {
+            background-color: white !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+            border-radius: 4px !important;
+        }
+        
+        .amap-scale-text {
+            background-color: rgba(255,255,255,0.9) !important;
+            border-radius: 2px !important;
+            padding: 2px 4px !important;
+        }
+        
+        /* 路线规划面板样式 */
+        .route-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 300px;
+            z-index: 100;
+        }
+        
+        /* 改进输入框布局 */
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            flex: 1 1 300px;
+        }
+        
+        /* 输入框样式优化 */
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+            outline: none;
+        }
+        
+        /* 交通方式按钮组样式 */
+        .transport-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .transport-options button {
+            flex: 1;
+            min-width: 80px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .transport-options button:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+        
+        .transport-options button.active {
+            background-color: #0056b3;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* 适配移动设备 */
+        @media (max-width: 480px) {
+            .transport-options button {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .input-group {
+                flex: 1 1 100%;
+            }
+        }
+        
         .status-bar {
             background-color: #f8f9fa;
             padding: 15px;
@@ -54,75 +178,86 @@
             50% { color: #007bff; }
             100% { color: inherit; }
         }
-        .input-group {
+        
+        /* 加载状态样式 */
+        .loading {
+            position: relative;
+            color: #666;
+        }
+        
+        .loading:after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            right: -24px;
+            top: 50%;
+            margin-top: -8px;
+            border: 2px solid #007bff;
+            border-radius: 50%;
+            border-right-color: transparent;
+            animation: loading-spin 0.75s linear infinite;
+        }
+        
+        @keyframes loading-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 错误消息样式 */
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px 15px;
             margin: 10px 0;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
             border-radius: 4px;
+            border: 1px solid #f5c6cb;
+            animation: fadeInOut 3s forwards;
         }
-        .transport-options {
-            margin: 15px 0;
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
         }
-        .transport-options button {
-            margin-right: 10px;
-            padding: 8px 15px;
-            border: none;
+        
+        /* 路线详情样式 */
+        .route-details {
+            background-color: #fff;
             border-radius: 4px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
+            padding: 15px;
+            margin-top: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .transport-options button:hover {
-            background-color: #0056b3;
+        
+        /* 地图容器加载状态 */
+        #mapContainer.loading {
+            position: relative;
+        }
+        
+        #mapContainer.loading:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.8);
+            z-index: 1;
+        }
+        
+        #mapContainer.loading:after {
+            content: '加载中...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            color: #007bff;
+            font-size: 18px;
         }
     </style>
-    <!-- 高德地图API -->
-    <script>
-        (function() {
-            function initMap() {
-                // 确保配置已加载
-                if (!window.mapConfig || !window.mapConfig.amapKey) {
-                    document.getElementById('mapStatus').textContent = '配置加载失败，请检查API密钥设置';
-                    return;
-                }
-
-                // 加载高德地图API
-                const mapScript = document.createElement('script');
-                mapScript.src = `https://webapi.amap.com/maps?v=2.0&key=${window.mapConfig.amapKey}&plugin=${window.mapConfig.plugins.join(',')}`;
-                mapScript.async = true;
-
-                // 处理加载错误
-                mapScript.onerror = () => {
-                    document.getElementById('mapStatus').textContent = '地图加载失败，请检查网络连接';
-                    console.error('高德地图API加载失败');
-                };
-
-                // 确保 API 加载完成后再加载业务代码
-                mapScript.onload = () => {
-                    const businessScript = document.createElement('script');
-                    businessScript.src = 'travel.js';
-                    businessScript.onerror = () => console.error('业务代码加载失败');
-                    document.head.appendChild(businessScript);
-                };
-
-                document.head.appendChild(mapScript);
-            }
-
-            // 等待配置加载完成后初始化地图
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initMap);
-            } else {
-                initMap();
-            }
-        })();
-    </script>
 </head>
 <body>
     <div class="container">
@@ -143,36 +278,51 @@
             </div>
         </div>
 
-        <!-- 输入表单 -->
+        <!-- 输入区域 -->
         <div class="input-section">
             <div class="input-group">
-                <label for="fromLocation">出发地：</label>
-                <input type="text" id="fromLocation" placeholder="请输入出发地">
+                <label for="fromLocation">起点</label>
+                <input type="text" id="fromLocation" placeholder="请输入起点">
             </div>
             <div class="input-group">
-                <label for="toLocation">目的地：</label>
-                <input type="text" id="toLocation" placeholder="请输入目的地">
+                <label for="toLocation">终点</label>
+                <input type="text" id="toLocation" placeholder="请输入终点">
             </div>
         </div>
 
         <!-- 交通方式选择 -->
         <div class="transport-options">
-            <button onclick="updateTravelMode('driving')">驾车</button>
-            <button onclick="updateTravelMode('walking')">步行</button>
+            <button onclick="updateTravelMode('driving')" class="active">驾车</button>
             <button onclick="updateTravelMode('transit')">公交</button>
+            <button onclick="updateTravelMode('walking')">步行</button>
             <button onclick="updateTravelMode('riding')">骑行</button>
         </div>
 
-        <!-- 地图容器 -->
-        <div id="mapContainer"></div>
+        <!-- 地图区域 -->
+        <div class="map-section">
+            <div id="mapContainer"></div>
+            <div id="routeInfo" class="route-info"></div>
+        </div>
 
-        <!-- 路线信息 -->
-        <div id="routeInfo"></div>
-        
-        <!-- 天气建议 -->
-        <div id="weatherAdvice"></div>
+        <!-- 天气信息 -->
+        <div id="weatherAdvice" class="weather-info"></div>
     </div>
 
-    <!-- 加载主要功能脚本已在地图API加载完成后动态加载 -->
+    <!-- 配置文件 -->
+    <script src="config.js"></script>
+    
+    <!-- 加载检查 -->
+    <script>
+        // 检查配置是否正确加载
+        window.addEventListener('load', function() {
+            if (!window.mapConfig) {
+                console.error('配置加载失败');
+                document.getElementById('mapStatus').textContent = '配置加载失败，请刷新页面重试';
+            }
+        });
+    </script>
+    
+    <!-- 业务逻辑 -->
+    <script src="travel.js"></script>
 </body>
 </html>
