@@ -18,93 +18,78 @@
   --transition-default: transform 0.3s ease;
 }
 
-/* 桌面设备的渐变动画 */
+/* ===================== 基本样式和全局设置 ===================== */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
-  background: linear-gradient(to right, #12c2e9, #c471ed, #f64f59);
-  background-size: 400% 400%;
-  -webkit-animation: gradientAnimation 15s ease infinite;
-  -moz-animation: gradientAnimation 15s ease infinite;
-  animation: gradientAnimation 15s ease infinite;
   margin: 0;
   padding: 0;
+  overflow-x: hidden; /* 防止横向滚动 */
+  
+  /* 桌面端渐变设置 */
+  background: linear-gradient(-45deg, #12c2e9, #c471ed, #f64f59);
+  background-size: 400% 400%;
+  background-attachment: fixed; /* 固定背景，防止滚动时出现问题 */
+  animation: gradientAnimation 15s ease infinite;
 }
 
-/* 动画关键帧，控制背景渐变的运动 */
-@-webkit-keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@-moz-keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
+/* 动画关键帧 */
 @keyframes gradientAnimation {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* 移动设备优化 */
+/* 添加全浏览器前缀 */
+@-webkit-keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 手机设备优化 - 彻底解决分层问题 */
 @media (max-width: 768px) {
-  html, body {
-    /* 确保HTML和body元素占满整个视口 */
-    transform: translateZ(0);
-    -webkit-font-smoothing: subpixel-antialiased;
-    height: 100%;
+  body {
+    /* 方案1: 使用伪元素创建背景层，避免分层问题 */
+    background: none; /* 移除body的背景 */
+    position: relative;
+    animation: none;
+  }
+  
+  body::before {
+    content: "";
+    position: fixed; /* 固定定位很重要 */
+    top: 0;
+    left: 0;
     width: 100%;
-    overflow-x: hidden;
+    height: 100%;
+    z-index: -1; /* 放在内容下面 */
+    background: linear-gradient(-45deg, #12c2e9, #c471ed, #f64f59);
+    background-size: 200% 200%; /* 简化动画区域 */
+    background-attachment: fixed;
+    animation: mobileGradient 10s ease infinite;
+    -webkit-animation: mobileGradient 10s ease infinite;
   }
   
-  body {
-    /* 简化背景，避免分层问题 */
-    background: linear-gradient(45deg, #12c2e9, #c471ed, #f64f59);
-    background-attachment: fixed; /* 固定背景，防止滚动时出现问题 */
-    background-size: cover;
-    
-    /* 移除动画，改用静态渐变 */
-    animation: none;
-    
-    /* 确保内容正确叠加在背景上 */
-    position: relative;
-    z-index: 1;
-  }
-  
-  /* 所有内容容器确保正确的层叠顺序 */
-  nav, .content-card, div {
-    position: relative;
-    z-index: 2;
-  }
-}
-
-  
-  /* 简化的动画关键帧 */
-  @keyframes simplifiedAnimation {
+  /* 移动端简化动画 */
+  @keyframes mobileGradient {
     0% { background-position: 0% 0%; }
     50% { background-position: 100% 100%; }
     100% { background-position: 0% 0%; }
   }
   
-  /* 添加前缀 */
-  @-webkit-keyframes simplifiedAnimation {
+  @-webkit-keyframes mobileGradient {
     0% { background-position: 0% 0%; }
     50% { background-position: 100% 100%; }
     100% { background-position: 0% 0%; }
   }
 }
 
-/* 小型移动设备的样式 */
+/* 小型移动设备的进一步优化 */
 @media (max-width: 480px) {
-  body {
-    /* 对于非常小的设备，完全使用静态渐变以优化性能 */
-    background: linear-gradient(45deg, #12c2e9, #c471ed, #f64f59);
-    background-size: 100% 100%;
-    animation: none;
+  body::before {
+    /* 可以进一步简化动画或使用更简单的渐变 */
+    animation: mobileGradient 15s ease infinite; /* 放慢动画 */
   }
 }
 
