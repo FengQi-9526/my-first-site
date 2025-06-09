@@ -22,9 +22,9 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
-  background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+  background: linear-gradient(to right, #fc466b, #3f5efb, #43cea2, #ffb347);
   background-size: 400% 400%;
-  animation: gradientAnimation 15s ease infinite;
+  animation: gradientAnimation 10s ease infinite;
   margin: 0;
   padding: 0;
 }
