@@ -18,18 +18,6 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-h2 {
-  color: #fff; /* 设置标题颜色为白色 */
-  margin-bottom: 20px; /* 标题下方的外边距 */
-  text-transform: capitalize; /* 首字母大写 */
-}
-
-p {
-  font-size: 16px; /* 设置段落字体大小 */
-  color: #ddd; /* 设置段落文字颜色为浅灰色 */
-  margin-bottom: 15px; /* 段落下方的外边距 */
-}
-
 
 /* ===================== 导航栏样式 ===================== */
 nav {
