@@ -50,21 +50,36 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* 移动设备的样式 */
+/* 移动设备优化 */
 @media (max-width: 768px) {
-  body {
-    /* 选项1: 简化的静态渐变 */
-    /*
-    background: linear-gradient(45deg, #12c2e9, #f64f59);
-    background-size: 100% 100%;
-    animation: none; /* 关闭动画，节省性能 */
-    */
-    
-    /* 选项2: 更轻量的动画效果 (二选一) */
-    background: linear-gradient(45deg, #12c2e9, #f64f59);
-    background-size: 200% 200%;
-    animation: simplifiedAnimation 8s ease infinite;
+  html, body {
+    /* 确保HTML和body元素占满整个视口 */
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
   }
+  
+  body {
+    /* 简化背景，避免分层问题 */
+    background: linear-gradient(45deg, #12c2e9, #c471ed, #f64f59);
+    background-attachment: fixed; /* 固定背景，防止滚动时出现问题 */
+    background-size: cover;
+    
+    /* 移除动画，改用静态渐变 */
+    animation: none;
+    
+    /* 确保内容正确叠加在背景上 */
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* 所有内容容器确保正确的层叠顺序 */
+  nav, .content-card, div {
+    position: relative;
+    z-index: 2;
+  }
+}
+
   
   /* 简化的动画关键帧 */
   @keyframes simplifiedAnimation {
