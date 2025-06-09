@@ -4,8 +4,21 @@
   <meta charset="UTF-8">
   <title>出行秘书 - fq-1z</title>
   <link rel="stylesheet" href="style.css">
-  <!-- 引入高德地图API -->
-  <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=1bd27163e674d34347e9ab8bfae19ecc"></script>
+  <!-- 引入高德地图API和所需插件 -->
+  <script>
+    // 从Netlify环境变量获取API密钥
+    const amapKey = process.env.AMAP_API_KEY;
+    if (!amapKey) {
+      console.error('未找到高德地图API密钥，请检查环境变量配置');
+      document.body.innerHTML = '<h1>配置错误</h1><p>请先配置高德地图API密钥</p>';
+      throw new Error('Missing AMAP API Key');
+    }
+    // 动态创建高德地图脚本
+    const mapScript = document.createElement('script');
+    mapScript.type = 'text/javascript';
+    mapScript.src = `https://webapi.amap.com/maps?v=2.0&key=${amapKey}&plugin=AMap.Geocoder,AMap.AutoComplete,AMap.Driving,AMap.Walking,AMap.Transfer,AMap.Riding,AMap.Weather,AMap.ToolBar,AMap.Scale`;
+    document.head.appendChild(mapScript);
+  </script>
 </head>
 <body>
   <nav>
