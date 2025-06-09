@@ -9,45 +9,49 @@ let currentRoute;  // 当前的路线规划
 
 // 初始化地图
 function initMap() {
-    map = new AMap.Map('mapContainer', {
-        resizeEnable: true,
-        center: [116.397428, 39.90923],  // 设置地图中心点
-        zoom: 10,  // 设置地图缩放级别
-    });
+    try {
+        map = new AMap.Map('mapContainer', {
+            resizeEnable: true,
+            center: [116.397428, 39.90923],  // 设置地图中心点
+            zoom: 10,  // 设置地图缩放级别
+        });
 
-    driving = new AMap.Driving({
-        map: map,
-        panel: 'routeInfo',  // 路线信息显示面板
-    });
+        driving = new AMap.Driving({
+            map: map,
+            panel: 'routeInfo',
+        });
 
-    transit = new AMap.Transit({
-        map: map,
-        panel: 'routeInfo',
-    });
+        transit = new AMap.Transit({
+            map: map,
+            panel: 'routeInfo',
+        });
 
-    walking = new AMap.Walking({
-        map: map,
-        panel: 'routeInfo',
-    });
+        walking = new AMap.Walking({
+            map: map,
+            panel: 'routeInfo',
+        });
 
-    riding = new AMap.Riding({
-        map: map,
-        panel: 'routeInfo',
-    });
+        riding = new AMap.Riding({
+            map: map,
+            panel: 'routeInfo',
+        });
 
-    // 显示加载状态
-    document.getElementById('mapStatus').textContent = '地图加载完成';
+        document.getElementById('mapStatus').textContent = '地图加载完成';
+    } catch (error) {
+        console.error('地图加载失败：', error);
+        document.getElementById('mapStatus').textContent = '地图加载失败';
+    }
 }
 
 // 更新交通方式
-function updateTravelMode(mode) {
+function updateTravelMode(event) {
     // 移除之前的路线规划
     if (currentRoute) {
         currentRoute.clear();
     }
 
     // 设置新的路线规划
-    switch (mode) {
+    switch (event.target.dataset.mode) {  // 使用 dataset 进行匹配
         case 'driving':
             currentRoute = driving;
             break;
@@ -93,9 +97,18 @@ function getRoute() {
             toGeo.getLocation(to, function(status, result) {
                 if (status === 'complete' && result.geocodes.length) {
                     let endPoint = result.geocodes[0].location;
-                    currentRoute.search(startPoint, endPoint);
+                    // 确保选中交通方式后再开始规划路线
+                    if (currentRoute) {
+                        currentRoute.search(startPoint, endPoint);
+                    } else {
+                        alert('请先选择交通方式');
+                    }
+                } else {
+                    alert('无法找到终点地址');
                 }
             });
+        } else {
+            alert('无法找到起点地址');
         }
     });
 }
@@ -128,7 +141,7 @@ window.onload = function() {
     let buttons = document.querySelectorAll('.transport-options button');
     buttons.forEach(button => {
         button.addEventListener('click', function(event) {
-            updateTravelMode(event.target.textContent.toLowerCase());
+            updateTravelMode(event);
         });
     });
 
