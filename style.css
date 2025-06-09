@@ -48,35 +48,36 @@ body {
 }
 
 /* 手机设备优化 - 彻底解决分层问题 */
+/* 方案2: 静态渐变 + 透明度动画 (如果上面方案仍有问题) */
 @media (max-width: 768px) {
-  body {
-    /* 方案1: 使用伪元素创建背景层，避免分层问题 */
-    background: none; /* 移除body的背景 */
-    position: relative;
+  body::before {
+    background: linear-gradient(-45deg, #12c2e9, #c471ed, #f64f59);
+    background-size: 100% 100%;
     animation: none;
   }
   
-  body::before {
+  body::after {
     content: "";
-    position: fixed; /* 固定定位很重要 */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; /* 放在内容下面 */
-    background: linear-gradient(-45deg, #12c2e9, #c471ed, #f64f59);
-    background-size: 200% 200%; /* 简化动画区域 */
-    background-attachment: fixed;
-    animation: mobileGradient 10s ease infinite;
-    -webkit-animation: mobileGradient 10s ease infinite;
+    z-index: -1;
+    background: linear-gradient(-45deg, #f64f59, #c471ed, #12c2e9); /* 颜色顺序反转 */
+    background-size: 100% 100%;
+    opacity: 0;
+    animation: fadeInOut 8s ease infinite;
   }
   
-  /* 移动端简化动画 */
-  @keyframes mobileGradient {
-    0% { background-position: 0% 0%; }
-    50% { background-position: 100% 100%; }
-    100% { background-position: 0% 0%; }
+  @keyframes fadeInOut {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
   }
+}
+
+  /* 移动端简化动画 */
   
   @-webkit-keyframes mobileGradient {
     0% { background-position: 0% 0%; }
