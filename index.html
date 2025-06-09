@@ -5,35 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的个人助手</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        /* 添加导航高亮样式 */
+        .nav-active {
+            background-color: rgba(255, 255, 255, 0.3) !important;
+            font-weight: bold;
+        }
+        
+        /* 添加页面过渡动画 */
+        .section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        
+        .section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 首页功能卡片样式 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card h3 {
+            margin-top: 0;
+            color: var(--primary-blue, #00c6ff);
+        }
+        
+        /* 加载动画 */
+        .spinner {
+            display: none;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-blue, #00c6ff);
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 移动端导航优化 */
+        @media (max-width: 768px) {
+            .top-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .top-nav a {
+                margin: 5px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
     
     <nav class="top-nav">
-        <a href="#" onclick="showPage('home')">🏠 首页</a> |
-        <a href="#" onclick="showPage('travel')">出行秘书</a> |
-        <a href="#" onclick="showPage('advisor')">战略顾问</a> |
-        <a href="#" onclick="showPage('discipline')">纪律教练</a> |
-        <a href="#" onclick="showPage('study')">学习规划师</a> |
-        <a href="#" onclick="showPage('studyPartner')">学习伙伴</a> |
-        <a href="#" onclick="showPage('task')">任务管理功能</a>
+        <a href="#" onclick="showPage('home')" id="nav-home" class="nav-item nav-active">🏠 首页</a> |
+        <a href="#" onclick="showPage('travel')" id="nav-travel" class="nav-item">出行秘书</a> |
+        <a href="#" onclick="showPage('advisor')" id="nav-advisor" class="nav-item">战略顾问</a> |
+        <a href="#" onclick="showPage('discipline')" id="nav-discipline" class="nav-item">纪律教练</a> |
+        <a href="#" onclick="showPage('study')" id="nav-study" class="nav-item">学习规划师</a> |
+        <a href="#" onclick="showPage('studyPartner')" id="nav-studyPartner" class="nav-item">学习伙伴</a> |
+        <a href="#" onclick="showPage('task')" id="nav-task" class="nav-item">任务管理</a>
     </nav>
 
-    <div id="home" class="section active" style="display: block;">
+    <!-- 首页内容 -->
+    <section id="home" class="section active">
         <h2>欢迎回来，枫祈！</h2>
         <p>这是你的个人任务总览区。</p>
-    </div>
+        
+        <!-- 首页功能板块 -->
+        <div class="feature-grid">
+            <div class="feature-card" onclick="showPage('task')">
+                <h3>✓ 任务管理</h3>
+                <p>管理并跟踪你的日常任务和待办事项</p>
+            </div>
+            
+            <div class="feature-card" onclick="showPage('travel')">
+                <h3>🚗 出行秘书</h3>
+                <p>获取出行建议、路线规划和天气提醒</p>
+            </div>
+            
+            <div class="feature-card" onclick="showPage('advisor')">
+                <h3>🧠 战略顾问</h3>
+                <p>分析你的生活计划，提供策略建议</p>
+            </div>
+            
+            <div class="feature-card" onclick="showPage('discipline')">
+                <h3>💪 纪律教练</h3>
+                <p>帮助你保持动力，培养良好习惯</p>
+            </div>
+            
+            <div class="feature-card" onclick="showPage('study')">
+                <h3>📚 学习规划师</h3>
+                <p>为各类学习目标创建定制化学习计划</p>
+            </div>
+            
+            <div class="feature-card" onclick="showPage('studyPartner')">
+                <h3>👥 学习伙伴</h3>
+                <p>互动式复习和知识巩固</p>
+            </div>
+        </div>
+    </section>
 
+    <!-- 任务管理页面 -->
     <section id="task" class="section">
         <h2>任务管理功能</h2>
         <form id="taskForm">
             <input type="text" id="taskInput" placeholder="输入任务..." required>
             <button type="submit">添加任务</button>
         </form>
+        <div class="spinner" id="taskSpinner"></div>
         <ul id="TaskList">
             <!-- 任务列表将在这里显示 -->
         </ul>
     </section>
 
+    <!-- 出行秘书页面 -->
     <section id="travel" class="section">
         <h2>出行秘书</h2>
         <p>这里将显示交通路线、天气建议等。</p>
@@ -46,11 +160,13 @@
 
             <button type="submit">分析出行建议</button>
         </form>
+        <div class="spinner" id="travelSpinner"></div>
         <div id="travelOutput">
             <!-- 分析结果将在这里显示 -->
         </div>
     </section>
 
+    <!-- 战略顾问页面 -->
     <section id="advisor" class="section">
         <h2>战略顾问</h2>
         <p>我会在这里和你一起拆解人生目标与计划。</p>
@@ -59,11 +175,13 @@
             <br>
             <button type="submit">分析计划</button>
         </form>
+        <div class="spinner" id="advisorSpinner"></div>
         <div id="advisorOutput">
             <!-- 分析结果将在这里显示 -->
         </div>
     </section>
 
+    <!-- 学习规划师页面 -->
     <section id="study" class="section">
         <h2>学习规划师</h2>
         <p>规划你的学习任务（如讲故事、英语、AI）。</p>
@@ -71,11 +189,13 @@
             <input type="text" id="studyInput" placeholder="你想学习什么？" required>
             <button type="submit">生成学习计划</button>
         </form>
+        <div class="spinner" id="studySpinner"></div>
         <div id="studyPlan">
             <!-- 这里会显示生成的学习计划 -->
         </div>
     </section>
 
+    <!-- 纪律教练页面 -->
     <section id="discipline" class="section">
         <h2>纪律教练</h2>
         <p>当你不想动的时候，我在这里陪你动起来！</p>
@@ -84,11 +204,13 @@
             <br>
             <button type="submit">获取鼓励和建议</button>
         </form>
+        <div class="spinner" id="disciplineSpinner"></div>
         <div id="disciplineOutput">
             <!-- 鼓励和建议将在这里显示 -->
         </div>
     </section>
 
+    <!-- 学习伙伴页面 -->
     <section id="studyPartner" class="section">
         <h2>学习伙伴</h2>
         <p>我会测试你学的内容，陪你互动复习。</p>
@@ -96,85 +218,114 @@
             <input type="text" id="studyPartnerInput" placeholder="输入你要复习的内容…" required>
             <button type="submit">提交</button>
         </form>
+        <div class="spinner" id="studyPartnerSpinner"></div>
         <div id="studyPartnerResponse">
             <!-- 回应会显示在这里 -->
         </div>
     </section>
 
     <script>
-        function showPage(pageId) {
-            const pages = ['home', 'task', 'travel', 'study', 'advisor', 'discipline', 'studyPartner'];
-            pages.forEach(id => {
-                document.getElementById(id).style.display = (id === pageId) ? 'block' : 'none';
-            });
-        }
+    // 改进的页面切换函数
+    function showPage(pageId) {
+        // 获取所有页面
+        const pages = ['home', 'task', 'travel', 'study', 'advisor', 'discipline', 'studyPartner'];
+        
+        // 移除所有导航项的活动状态
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('nav-active');
+        });
+        
+        // 高亮当前导航项
+        document.getElementById(`nav-${pageId}`).classList.add('nav-active');
+        
+        // 先将所有页面标记为非活动状态
+        pages.forEach(id => {
+            const section = document.getElementById(id);
+            section.classList.remove('active');
+            
+            // 为动画准备 - 延迟隐藏
+            if (id !== pageId) {
+                setTimeout(() => {
+                    section.style.display = 'none';
+                }, 400); // 与CSS过渡动画时间匹配
+            }
+        });
+        
+        // 显示并激活当前页面
+        const currentPage = document.getElementById(pageId);
+        currentPage.style.display = 'block';
+        
+        // 触发重排以应用过渡动画
+        setTimeout(() => {
+            currentPage.classList.add('active');
+        }, 50);
+    }
 
-        // 任务管理功能
-        document.getElementById('taskForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const taskInput = document.getElementById('taskInput');
-            const taskText = taskInput.value.trim();
+    // 任务管理功能
+    document.getElementById('taskForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const taskInput = document.getElementById('taskInput');
+        const taskText = taskInput.value.trim();
+        const spinner = document.getElementById('taskSpinner');
 
-            if (taskText) {
+        if (taskText) {
+            // 显示加载动画
+            spinner.style.display = 'block';
+            
+            // 模拟处理时间
+            setTimeout(() => {
                 const taskList = document.getElementById('TaskList');
                 const li = document.createElement('li');
                 li.textContent = taskText;
                 taskList.appendChild(li);
-                taskInput.value = ''; // 清空输入框
-            }
-        });
+                taskInput.value = '';
+                spinner.style.display = 'none';
+            }, 500);
+        }
+    });
 
-        // 出行秘书功能
-        document.getElementById('travelForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const destination = document.getElementById('destination').value.trim();
-            const date = document.getElementById('date').value;
-            const output = document.getElementById('travelOutput');
+    // 出行秘书功能
+    document.getElementById('travelForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const destination = document.getElementById('destination').value.trim();
+        const date = document.getElementById('date').value;
+        const output = document.getElementById('travelOutput');
+        const spinner = document.getElementById('travelSpinner');
 
-            if (destination && date) {
+        if (destination && date) {
+            // 显示加载动画
+            spinner.style.display = 'block';
+            output.innerHTML = '';
+            
+            // 模拟数据处理时间
+            setTimeout(() => {
                 let suggestion = `📍出行目的地：${destination} <br>📅 出行时间：${date} <br>`;
                 suggestion += `🗺️ 建议：请提前查询是否有直达公交或地铁。如路线复杂，可备好备用路线。<br>`;
                 suggestion += `🌦️ 天气提醒：建议出行前查看天气，如有雨请带伞。<br>`;
                 suggestion += `👕 穿搭建议：清晨出行建议穿戴舒适、防风保暖衣物。<br>`;
                 output.innerHTML = suggestion;
-
+                
                 document.getElementById('destination').value = '';
                 document.getElementById('date').value = '';
-            }
-        });
+                spinner.style.display = 'none';
+            }, 800);
+        }
+    });
 
-        // 学习规划师功能
-        document.getElementById('studyForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const input = document.getElementById('studyInput').value.trim();
-            const output = document.getElementById('studyPlan');
+    // 战略顾问功能
+    document.getElementById('advisorForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const planInput = document.getElementById('planInput').value.trim();
+        const output = document.getElementById('advisorOutput');
+        const spinner = document.getElementById('advisorSpinner');
 
-            if (input.includes('讲故事')) {
-                output.innerHTML = `
-                    <h3>🎯 60天讲故事计划（简版）</h3>
-                    <ul>
-                        <li><strong>第1-10天：</strong> 观察生活 + 阅读故事案例</li>
-                        <li><strong>第11-20天：</strong> 学习三幕式结构（起-承-转-合）</li>
-                        <li><strong>第21-30天：</strong> 模仿写作 1 篇短故事每3天</li>
-                        <li><strong>第31-45天：</strong> 制作 1-3 分钟语音故事，练习讲述节奏</li>
-                        <li><strong>第46-60天：</strong> 创作自己的原创故事 + 视频/语音呈现</li>
-                    </ul>
-                    <p>✨ 小贴士：每天写日记能让你对“如何打动人”有更深的理解哦！</p>
-                `;
-            } else {
-                output.innerHTML = `<p>暂时只支持“讲故事”方向的计划。未来会支持更多学习主题哟～</p>`;
-            }
-
-            document.getElementById('studyInput').value = '';
-        });
-
-        // 战略顾问功能
-        document.getElementById('advisorForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const planInput = document.getElementById('planInput').value.trim();
-            const output = document.getElementById('advisorOutput');
-
-            if (planInput) {
+        if (planInput) {
+            // 显示加载动画
+            spinner.style.display = 'block';
+            output.innerHTML = '';
+            
+            // 模拟数据处理时间
+            setTimeout(() => {
                 let feedback = '';
                 if (planInput.includes('每天') || planInput.includes('早上')) {
                     feedback = '看起来你想建立一个规律的习惯，这是个好主意！但要注意能否长期坚持。建议设立起床提醒，保持前7天不间断。';
@@ -185,32 +336,89 @@
                 }
                 output.innerHTML = `<p>${feedback}</p>`;
                 document.getElementById('planInput').value = '';
-            }
-        });
+                spinner.style.display = 'none';
+            }, 700);
+        }
+    });
 
-        // 纪律教练功能
-        document.getElementById('disciplineForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const disciplineInput = document.getElementById('disciplineInput').value.trim();
-            const output = document.getElementById('disciplineOutput');
+    // 学习规划师功能
+    document.getElementById('studyForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const input = document.getElementById('studyInput').value.trim();
+        const output = document.getElementById('studyPlan');
+        const spinner = document.getElementById('studySpinner');
 
-            if (disciplineInput) {
+        if (input) {
+            // 显示加载动画
+            spinner.style.display = 'block';
+            output.innerHTML = '';
+            
+            // 模拟处理时间
+            setTimeout(() => {
+                if (input.includes('讲故事')) {
+                    output.innerHTML = `
+                        <h3>🎯 60天讲故事计划（简版）</h3>
+                        <ul>
+                            <li><strong>第1-10天：</strong> 观察生活 + 阅读故事案例</li>
+                            <li><strong>第11-20天：</strong> 学习三幕式结构（起-承-转-合）</li>
+                            <li><strong>第21-30天：</strong> 模仿写作 1 篇短故事每3天</li>
+                            <li><strong>第31-45天：</strong> 制作 1-3 分钟语音故事，练习讲述节奏</li>
+                            <li><strong>第46-60天：</strong> 创作自己的原创故事 + 视频/语音呈现</li>
+                        </ul>
+                        <p>✨ 小贴士：每天写日记能让你对"如何打动人"有更深的理解哦！</p>
+                    `;
+                } else {
+                    output.innerHTML = `<p>暂时只支持"讲故事"方向的计划。未来会支持更多学习主题哟～</p>`;
+                }
+                
+                document.getElementById('studyInput').value = '';
+                spinner.style.display = 'none';
+            }, 900);
+        }
+    });
+
+    // 纪律教练功能
+    document.getElementById('disciplineForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const disciplineInput = document.getElementById('disciplineInput').value.trim();
+        const output = document.getElementById('disciplineOutput');
+        const spinner = document.getElementById('disciplineSpinner');
+
+        if (disciplineInput) {
+            // 显示加载动画
+            spinner.style.display = 'block';
+            output.innerHTML = '';
+            
+            // 模拟处理时间
+            setTimeout(() => {
                 output.innerHTML = `<p>🏃‍♂️ 别担心！我知道现在难，但起步就好。每次只需要坚持 5 分钟，之后再逐步增加时间，你会更有动力的！加油哦！</p>`;
                 document.getElementById('disciplineInput').value = '';
-            }
-        });
+                spinner.style.display = 'none';
+            }, 600);
+        }
+    });
 
-        // 学习伙伴功能
-        document.getElementById('studyPartnerForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const studyPartnerInput = document.getElementById('studyPartnerInput').value.trim();
-            const response = document.getElementById('studyPartnerResponse');
+    // 学习伙伴功能
+    document.getElementById('studyPartnerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const studyPartnerInput = document.getElementById('studyPartnerInput').value.trim();
+        const response = document.getElementById('studyPartnerResponse');
+        const spinner = document.getElementById('studyPartnerSpinner');
 
-            if (studyPartnerInput) {
+        if (studyPartnerInput) {
+            // 显示加载动画
+            spinner.style.display = 'block';
+            response.innerHTML = '';
+            
+            // 模拟处理时间
+            setTimeout(() => {
                 response.innerHTML = `<p>🔄 你想复习的内容是：${studyPartnerInput}。来，快速回顾一下这个知识点，确保你记得！</p>`;
                 document.getElementById('studyPartnerInput').value = '';
-            }
-        });
-    </script>
+                spinner.style.display = 'none';
+            }, 750);
+        }
+    });
+</script>
+
 </body>
 </html>
