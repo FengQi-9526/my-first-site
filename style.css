@@ -1,33 +1,40 @@
 /* ===================== 基本样式和全局设置 ===================== */
+
+/* 设置页面字体 */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 设置页面字体 */
-  line-height: 1.6; /* 设置行高 */
-  background: linear-gradient(to right, #00c6ff, #0072ff);  /* 渐变从蓝色到紫色 */
-  background-size: 400% 400%; /* 背景的大小，创建动态的渐变效果 */
-  animation: gradientAnimation 15s ease infinite;  /* 动画效果 */
-  margin: 0;
-  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 选择现代、清晰的字体 */
+  line-height: 1.6; /* 设置行高，保证文本间距舒适 */
+  
+  /* 设置背景渐变，创建动感效果 */
+  background: linear-gradient(to right, #00c6ff, #0072ff, #9c27b0, #4caf50);  /* 多色渐变，从蓝到紫再到绿色 */
+  background-size: 400% 400%; /* 增加渐变背景的大小，保证渐变能在动画中平滑移动 */
+  animation: gradientAnimation 15s ease infinite;  /* 背景渐变的动画效果，15秒内无限循环 */
+  
+  margin: 0; /* 去除页面外边距 */
+  padding: 0; /* 去除页面内边距 */
 }
 
 /* 动画关键帧，控制背景渐变的运动 */
 @keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% { background-position: 0% 50%; }  /* 起始背景位置 */
+  25% { background-position: 100% 50%; } /* 第25%时，背景向右移动 */
+  50% { background-position: 200% 50%; } /* 第50%时，背景继续向右移动 */
+  75% { background-position: 300% 50%; } /* 第75%时，背景继续移动 */
+  100% { background-position: 0% 50%; } /* 最后，背景回到起始位置 */
 }
 
-
 h2 {
-  color: #333; /* 标题颜色 */
-  margin-bottom: 20px; /* 下方外边距 */
+  color: #fff; /* 设置标题颜色为白色 */
+  margin-bottom: 20px; /* 标题下方的外边距 */
   text-transform: capitalize; /* 首字母大写 */
 }
 
 p {
   font-size: 16px; /* 设置段落字体大小 */
-  color: #666; /* 设置段落文字颜色 */
-  margin-bottom: 15px; /* 下方外边距 */
+  color: #ddd; /* 设置段落文字颜色为浅灰色 */
+  margin-bottom: 15px; /* 段落下方的外边距 */
 }
+
 
 /* ===================== 导航栏样式 ===================== */
 nav {
