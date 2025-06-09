@@ -3,10 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>出行秘书 - 路线规划与天气建议</title>
+    <title>交通出行规划</title>
     <link rel="stylesheet" href="style.css">
     <!-- 配置文件 -->
     <script src="config.js"></script>
+    <style>
+        #mapContainer {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        .status-bar {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status-item {
+            flex: 1;
+        }
+        
+        .api-stats {
+            text-align: right;
+        }
+        
+        .token-info {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .token-info span {
+            margin-left: 15px;
+        }
+        
+        .token-info span:first-child {
+            margin-left: 0;
+        }
+
+        .token-update {
+            animation: highlight 0.5s ease-in-out;
+        }
+
+        @keyframes highlight {
+            0% { color: inherit; }
+            50% { color: #007bff; }
+            100% { color: inherit; }
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .transport-options {
+            margin: 15px 0;
+        }
+        .transport-options button {
+            margin-right: 10px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        .transport-options button:hover {
+            background-color: #0056b3;
+        }
+    </style>
     <!-- 高德地图API -->
     <script>
         (function() {
@@ -50,61 +126,51 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>出行秘书</h1>
-            <p>路线规划与天气建议</p>
-        </header>
-
-        <div class="api-status">
-            <p>API调用统计：当前 <span id="currentTokens">0</span> 次 / 今日累计 <span id="totalTokens">0</span> 次</p>
-            <p id="mapStatus">正在加载地图...</p>
-        </div>
-
-        <div class="main-content">
-            <div class="left-panel">
-                <form id="travelForm" class="travel-form">
-                    <div class="form-group">
-                        <label for="fromLocation">出发地:</label>
-                        <input type="text" id="fromLocation" required placeholder="请输入起点">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="toLocation">目的地:</label>
-                        <input type="text" id="toLocation" required placeholder="请输入终点">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="travelMode">出行方式:</label>
-                        <select id="travelMode">
-                            <option value="driving">驾车</option>
-                            <option value="transit">公交</option>
-                            <option value="walking">步行</option>
-                            <option value="bicycling">骑行</option>
-                        </select>
-                    </div>
-                    
-                    <button type="submit">规划路线</button>
-                </form>
-
-                <div id="weatherInfo" class="weather-info">
-                    <h3>天气信息</h3>
-                    <p>选择目的地后显示天气信息...</p>
-                </div>
-
-                <div id="routeDetails" class="route-details">
-                    <h3>路线详情</h3>
-                    <p>请先规划路线...</p>
-                </div>
+        <h1>交通出行规划</h1>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-item">
+                <span id="mapStatus">正在加载地图...</span>
             </div>
-
-            <div class="right-panel">
-                <div id="mapContainer" class="map-container"></div>
+            <div class="status-item api-stats">
+                <span>API调用统计</span>
+                <div class="token-info">
+                    <span>当前: <span id="currentTokens">0</span></span>
+                    <span>今日: <span id="totalTokens">0</span></span>
+                    <span>上限: <span id="maxTokens">1000</span></span>
+                </div>
             </div>
         </div>
 
-        <footer>
-            <p>注意：API调用次数有限，请合理使用。</p>
-        </footer>
+        <!-- 输入表单 -->
+        <div class="input-section">
+            <div class="input-group">
+                <label for="fromLocation">出发地：</label>
+                <input type="text" id="fromLocation" placeholder="请输入出发地">
+            </div>
+            <div class="input-group">
+                <label for="toLocation">目的地：</label>
+                <input type="text" id="toLocation" placeholder="请输入目的地">
+            </div>
+        </div>
+
+        <!-- 交通方式选择 -->
+        <div class="transport-options">
+            <button onclick="updateTravelMode('driving')">驾车</button>
+            <button onclick="updateTravelMode('walking')">步行</button>
+            <button onclick="updateTravelMode('transit')">公交</button>
+            <button onclick="updateTravelMode('riding')">骑行</button>
+        </div>
+
+        <!-- 地图容器 -->
+        <div id="mapContainer"></div>
+
+        <!-- 路线信息 -->
+        <div id="routeInfo"></div>
+        
+        <!-- 天气建议 -->
+        <div id="weatherAdvice"></div>
     </div>
 
     <!-- 加载主要功能脚本已在地图API加载完成后动态加载 -->
