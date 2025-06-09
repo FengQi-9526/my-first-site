@@ -1,12 +1,30 @@
-/* ===================== 基本样式和全局设置 ===================== */
+/* ===================== CSS变量定义 ===================== */
+:root {
+  --primary-blue: #00c6ff;
+  --secondary-blue: #0072ff;
+  --light-bg: #f0f0f0;
+  --white: #ffffff;
+  --green: #4CAF50;
+  --green-dark: #45a049;
+  --text-dark: #333;
+  --travel-bg: #e3f2fd;
+  --study-bg: #e8f5e9;
+  --partner-bg: #bbdefb;
+  --border-radius-sm: 5px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --shadow-small: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --shadow-default: 0 6px 15px rgba(0, 0, 0, 0.1);
+  --transition-default: transform 0.3s ease;
+}
 
-/* 设置页面字体 */
+/* ===================== 基本样式和全局设置 ===================== */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 设置页面字体 */
-  line-height: 1.6; /* 设置行高 */
-  background: linear-gradient(to right, #00c6ff, #0072ff);  /* 渐变从蓝色到紫色 */
-  background-size: 400% 400%; /* 背景的大小，创建动态的渐变效果 */
-  animation: gradientAnimation 15s ease infinite;  /* 动画效果 */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
   margin: 0;
   padding: 0;
 }
@@ -18,113 +36,210 @@ body {
   100% { background-position: 0% 50%; }
 }
 
+@-webkit-keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
 /* ===================== 导航栏样式 ===================== */
 nav {
-  background: rgba(255, 255, 255, 0.1); /* 设置半透明背景 */
-  padding: 15px 0; /* 内边距 */
-  font-size: 18px; /* 字体大小 */
-  text-align: center; /* 文字居中 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 阴影效果 */
-  backdrop-filter: blur(10px); /* 毛玻璃效果：背景模糊 */
-  position: relative; /* 确保背景层次正确 */
-  z-index: 10; /* 确保导航栏在最上层 */
-  border-radius: 10px; /* 圆角效果 */
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px 0;
+  font-size: 18px;
+  text-align: center;
+  box-shadow: var(--shadow-small);
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 10;
+  border-radius: var(--border-radius-lg);
 }
 
 nav a {
-  color: white; /* 链接文字颜色 */
-  padding: 12px 20px; /* 内边距 */
-  text-decoration: none; /* 去除下划线 */
-  margin: 0 15px; /* 左右外边距 */
-  border-radius: 5px; /* 圆角边框 */
-  transition: background-color 0.3s ease, transform 0.3s ease; /* 动画效果 */
+  color: var(--white);
+  padding: 12px 20px;
+  text-decoration: none;
+  margin: 0 15px;
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
 }
 
 nav a:hover {
-  background-color: #ffffff; /* 鼠标悬停时背景色 */
-  color: #00c6ff; /* 鼠标悬停时文字颜色 */
-  transform: scale(1.1); /* 鼠标悬停时放大效果 */
+  background-color: var(--white);
+  color: var(--primary-blue);
+  transform: scale(1.1);
 }
 
-/* ===================== 页面内容区 ===================== */
+/* ===================== 内容卡片通用样式 ===================== */
+.content-card {
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 800px;
+  border-radius: var(--border-radius-lg);
+  background: linear-gradient(to right, var(--light-bg), var(--white));
+  box-shadow: var(--shadow-default);
+  transition: var(--transition-default);
+}
+
+.content-card:hover {
+  transform: scale(1.02);
+}
+
+/* 为兼容性保留div样式，但建议使用.content-card类代替 */
 div {
-  padding: 20px; /* 内边距 */
-  margin: 20px auto; /* 外边距，居中显示 */
-  max-width: 800px; /* 最大宽度 */
-  border-radius: 12px; /* 圆角 */
-  background: linear-gradient(to right, #f0f0f0, #ffffff); /* 渐变背景 */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-  transition: transform 0.3s ease; /* 页面过渡动画 */
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 800px;
+  border-radius: var(--border-radius-lg);
+  background: linear-gradient(to right, var(--light-bg), var(--white));
+  box-shadow: var(--shadow-default);
+  transition: var(--transition-default);
 }
 
 div:hover {
-  transform: scale(1.02); /* 页面悬停时有轻微放大效果 */
+  transform: scale(1.02);
 }
 
 /* ===================== 主页欢迎语 ===================== */
 #home h2 {
-  font-size: 30px; /* 欢迎语标题字体大小 */
-  color: #333; /* 字体颜色 */
-  font-weight: bold; /* 字体加粗 */
-  text-align: center; /* 居中显示 */
+  font-size: 30px;
+  color: var(--text-dark);
+  font-weight: bold;
+  text-align: center;
 }
 
 /* ===================== 新建任务输入框 ===================== */
 #newTask {
-  background-color: #ffffff; /* 输入框背景颜色 */
-  border: 2px solid #4CAF50; /* 输入框边框 */
-  border-radius: 8px; /* 圆角边框 */
-  padding: 15px; /* 内边距 */
+  background-color: var(--white);
+  border: 2px solid var(--green);
+  border-radius: var(--border-radius-md);
+  padding: 15px;
 }
 
 /* ===================== 页面背景区 ===================== */
+#travel, #study, #studyPartner {
+  border-radius: var(--border-radius-lg);
+}
+
 #travel {
-  background-color: #e3f2fd; /* 出行秘书背景颜色 */
-  border-radius: 12px; /* 圆角 */
+  background-color: var(--travel-bg);
 }
 
 #study {
-  background-color: #e8f5e9; /* 学习规划师背景颜色 */
-  border-radius: 12px; /* 圆角 */
+  background-color: var(--study-bg);
 }
 
-/* ===================== 手机设备的优化 ===================== */
+#studyPartner {
+  background-color: var(--partner-bg);
+}
+
+/* ===================== 表单元素样式 ===================== */
+input[type="text"], textarea {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: var(--border-radius-sm);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: var(--green);
+  color: var(--white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--green-dark);
+}
+
+/* ===================== Flexbox布局 ===================== */
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.flex-item {
+  flex: 1 1 300px;
+}
+
+/* ===================== 响应式布局 ===================== */
+/* 平板设备 */
+@media (max-width: 992px) and (min-width: 769px) {
+  nav a {
+    padding: 10px 15px;
+    margin: 0 10px;
+  }
+  
+  .content-card, div {
+    max-width: 90%;
+  }
+}
+
+/* 手机设备 */
 @media (max-width: 768px) {
   body {
-    font-size: 14px; /* 手机设备下调整字体大小 */
+    font-size: 14px;
   }
 
   nav {
-    padding: 8px;
-    background-color: #4CAF50 !important; /* 强制使用渐变色背景 */
-    background-color: -webkit-linear-gradient(#4CAF50, #45a049); /* 网页兼容性 */
-    background-color: linear-gradient(#4CAF50, #45a049); /* 渐变色背景 */
-    height: 60px; /* 导航栏高度 */
+    /* 保持与桌面版一致的导航栏风格，只调整尺寸 */
     padding: 10px;
-    text-align: center; /* 导航栏文字居中 */
+    height: auto;
+    font-size: 16px;
   }
 
   nav a {
-    font-size: 14px; /* 调整字体大小 */
-    padding: 8px; /* 调整内边距 */
+    font-size: 14px;
+    padding: 8px;
+    margin: 0 5px;
   }
 
-  .content {
-    padding: 10px; /* 调整页面内容内边距 */
+  .content-card, div {
+    padding: 15px;
+    max-width: 95%;
   }
 
   input[type="text"], textarea {
-    width: 100%; /* 输入框和文本框宽度 100% */
-    font-size: 16px; /* 调整字体大小 */
+    width: 100%;
+    font-size: 16px;
   }
 
   button {
-    padding: 8px 16px; /* 调整按钮内边距 */
-    font-size: 14px; /* 调整按钮字体大小 */
+    padding: 8px 16px;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 10px;
   }
 
-  .page {
-    padding: 15px; /* 调整页面内边距 */
+  #home h2 {
+    font-size: 24px;
+  }
+}
+
+/* 小型手机设备 */
+@media (max-width: 480px) {
+  nav {
+    padding: 8px 5px;
+  }
+
+  nav a {
+    font-size: 12px;
+    padding: 6px;
+    margin: 0 2px;
+  }
+
+  .content-card, div {
+    padding: 12px;
+  }
+
+  #home h2 {
+    font-size: 20px;
   }
 }
