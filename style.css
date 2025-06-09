@@ -2,25 +2,20 @@
 
 /* 设置页面字体 */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 选择现代、清晰的字体 */
-  line-height: 1.6; /* 设置行高，保证文本间距舒适 */
-  
-  /* 设置背景渐变，创建动感效果 */
-  background: linear-gradient(to right, #00c6ff, #0072ff, #9c27b0, #4caf50);  /* 多色渐变，从蓝到紫再到绿色 */
-  background-size: 400% 400%; /* 增加渐变背景的大小，保证渐变能在动画中平滑移动 */
-  animation: gradientAnimation 15s ease infinite;  /* 背景渐变的动画效果，15秒内无限循环 */
-  
-  margin: 0; /* 去除页面外边距 */
-  padding: 0; /* 去除页面内边距 */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 设置页面字体 */
+  line-height: 1.6; /* 设置行高 */
+  background: linear-gradient(to right, #00c6ff, #0072ff);  /* 渐变从蓝色到紫色 */
+  background-size: 400% 400%; /* 背景的大小，创建动态的渐变效果 */
+  animation: gradientAnimation 15s ease infinite;  /* 动画效果 */
+  margin: 0;
+  padding: 0;
 }
 
 /* 动画关键帧，控制背景渐变的运动 */
 @keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }  /* 起始背景位置 */
-  25% { background-position: 100% 50%; } /* 第25%时，背景向右移动 */
-  50% { background-position: 200% 50%; } /* 第50%时，背景继续向右移动 */
-  75% { background-position: 300% 50%; } /* 第75%时，背景继续移动 */
-  100% { background-position: 0% 50%; } /* 最后，背景回到起始位置 */
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 h2 {
@@ -38,13 +33,15 @@ p {
 
 /* ===================== 导航栏样式 ===================== */
 nav {
-  background: linear-gradient(to right, rgba(0, 198, 255, 0.7), rgba(0, 114, 255, 0.7)); /* 添加渐变背景颜色和透明度 */
+  background: rgba(255, 255, 255, 0.1); /* 设置半透明背景 */
   padding: 15px 0; /* 内边距 */
   font-size: 18px; /* 字体大小 */
   text-align: center; /* 文字居中 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+  backdrop-filter: blur(10px); /* 毛玻璃效果：背景模糊 */
   position: relative; /* 确保背景层次正确 */
   z-index: 10; /* 确保导航栏在最上层 */
+  border-radius: 10px; /* 圆角效果 */
 }
 
 nav a {
@@ -58,7 +55,7 @@ nav a {
 
 nav a:hover {
   background-color: #ffffff; /* 鼠标悬停时背景色 */
-  color: #4CAF50; /* 鼠标悬停时文字颜色 */
+  color: #00c6ff; /* 鼠标悬停时文字颜色 */
   transform: scale(1.1); /* 鼠标悬停时放大效果 */
 }
 
