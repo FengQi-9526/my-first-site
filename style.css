@@ -627,3 +627,47 @@ button:hover {
 .token-update {
   animation: tokenPulse 0.5s ease-in-out; /* 应用脉动动画 */
 }
+
+
+/* --- 出行秘书模块样式 --- */
+
+body {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+#map {
+  height: 400px;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+input {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 6px 10px;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.weather-info {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.6;
+}
