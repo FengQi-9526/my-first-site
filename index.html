@@ -103,6 +103,30 @@
         <h2>欢迎回来，枫祈！</h2>
         <p>这是你的个人任务总览区。</p>
         
+        <!-- 任务总览卡片 -->
+        <div class="card">
+            <div class="card-header">
+                <h3>个人任务总览</h3>
+                <a href="task.html" class="more-link">查看全部</a>
+            </div>
+            <div class="task-overview">
+                <div class="stat-item" onclick="window.location.href='task.html'">
+                    <i class="fas fa-tasks"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">待办任务</span>
+                        <span class="stat-value" id="pendingTaskCount">0</span>
+                    </div>
+                </div>
+                <div class="stat-item" onclick="window.location.href='task.html'">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">已完成</span>
+                        <span class="stat-value" id="completedTaskCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- 首页功能板块 -->
         <div class="feature-grid">
             <div class="feature-card" onclick="showPage('task')">

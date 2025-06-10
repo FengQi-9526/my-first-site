@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于 - 我的个人站点</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* 添加导航高亮样式 */
+        .nav-active {
+            background-color: rgba(255, 255, 255, 0.3) !important;
+            font-weight: bold;
+        }
+
+        /* 移动端导航优化 */
+        @media (max-width: 768px) {
+            .top-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .top-nav a {
+                margin: 5px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <ul>
+            <a href="index.html">🏠 首页</a></li>
+            <a href="travel.html">🚗 出行秘书</a></li>
+            <a href="advisor.html">📊 战略顾问</a></li>
+            <a href="discipline.html">🎯 纪律教练</a></li>
+            <a href="planner.html">📘 学习规划师</a></li>
+            <a href="study-partner.html">🤝 学习伙伴</a></li>
+            <a href="task.html">✅ 任务管理</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section class="section active">
+            <h1>关于</h1>
+            <div class="content">
+                <h2>欢迎来到我的个人站点</h2>
+                <p>这是一个集任务管理、学习规划和博客于一体的个人网站。</p>
+                <p>主要功能：</p>
+                <ul>
+                    <li>任务管理：帮助你管理日常任务和待办事项</li>
+                    <li>学习规划师：制定和跟踪你的学习计划</li>
+                    <li>博客：分享学习心得和经验</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

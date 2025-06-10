@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="任务管理系统 - 高效管理您的日常任务">
+    <meta name="keywords" content="任务管理,待办事项,时间管理,项目管理">
+    <title>任务管理 - 我的个人站点</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="task.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <ul>
+            <li><a href="index.html">🏠 首页</a></li>
+            <li><a href="travel.html">🚗 出行秘书</a></li>
+            <li><a href="advisor.html">📊 战略顾问</a></li>
+            <li><a href="discipline.html">🎯 纪律教练</a></li>
+            <li><a href="planner.html">📘 学习规划师</a></li>
+            <li><a href="study-partner.html">🤝 学习伙伴</a></li>
+            <li><a href="task.html" class="nav-active">✅ 任务管理</a></li>
+            <li class="dropdown">
+                <button class="dropbtn">📑 更多功能 ▾</button>
+                <div class="dropdown-content">
+                    <a href="task-analytics.html">📊 统计分析</a>
+                    <a href="task-calendar.html">📅 日程规划</a>
+                    <a href="task-team.html">👥 团队协作</a>
+                    <a href="task-project.html">📋 项目管理</a>
+                    <a href="task-time.html">⏱️ 时间追踪</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section class="section active">
+            <h1>任务管理</h1>
+            
+            <div class="task-nav">
+                <button class="nav-btn active" data-filter="all">📋 全部</button>
+                <button class="nav-btn" data-filter="today">📅 今天</button>
+                <button class="nav-btn" data-filter="important">⭐ 重要</button>
+                <div class="filter-wrapper">
+                    <div class="filter-container">
+                        <button class="filter-main-btn">
+                            <i class="fas fa-filter"></i> 高级筛选
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="filter-menu">
+                            <div class="filter-item">
+                                <div class="filter-item-header">
+                                    <i class="far fa-clock"></i>
+                                    <span>按时间筛选</span>
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                                <div class="filter-submenu">
+                                    <button onclick="setFilter('all')" class="filter-btn active" data-filter="all">全部</button>
+                                    <button onclick="setFilter('today')" class="filter-btn" data-filter="today">今天</button>
+                                    <button onclick="setFilter('week')" class="filter-btn" data-filter="week">本周</button>
+                                </div>
+                            </div>
+                            <div class="filter-item">
+                                <div class="filter-item-header">
+                                    <i class="fas fa-tasks"></i>
+                                    <span>按状态筛选</span>
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                                <div class="filter-submenu">
+                                    <button onclick="setFilter('pending')" class="filter-btn" data-filter="pending">待处理</button>
+                                    <button onclick="setFilter('completed')" class="filter-btn" data-filter="completed">已完成</button>
+                                    <button onclick="setFilter('important')" class="filter-btn" data-filter="important">重要</button>
+                                </div>
+                            </div>
+                            <div class="filter-item">
+                                <div class="filter-item-header">
+                                    <i class="fas fa-flag"></i>
+                                    <span>按优先级筛选</span>
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                                <div class="filter-submenu">
+                                    <button onclick="setFilter('high')" class="filter-btn" data-filter="high">高优先级</button>
+                                    <button onclick="setFilter('medium')" class="filter-btn" data-filter="medium">中优先级</button>
+                                    <button onclick="setFilter('low')" class="filter-btn" data-filter="low">低优先级</button>
+                                </div>
+                            </div>
+                            <div class="filter-item">
+                                <div class="filter-item-header">
+                                    <i class="fas fa-tags"></i>
+                                    <span>按分类筛选</span>
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                                <div class="filter-submenu">
+                                    <select id="categoryFilter" onchange="filterByCategory(this.value)">
+                                        <option value="all">所有分类</option>
+                                        <option value="工作">工作</option>
+                                        <option value="学习">学习</option>
+                                        <option value="生活">生活</option>
+                                        <option value="健康">健康</option>
+                                        <option value="其他">其他</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="taskForm" class="task-form">
+                <div class="form-group">
+                    <input type="text" id="taskInput" placeholder="输入新任务..." required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="taskCategory" list="categoryList" placeholder="选择或输入分类">
+                    <datalist id="categoryList">
+                        <option value="工作">
+                        <option value="学习">
+                        <option value="生活">
+                        <option value="健康">
+                        <option value="其他">
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <select id="taskPriority" required>
+                        <option value="" disabled selected>选择优先级</option>
+                        <option value="high">高</option>
+                        <option value="medium">中</option>
+                        <option value="low">低</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="date" id="taskDueDate" title="设置截止日期">
+                </div>
+                <button type="submit">添加任务</button>
+            </form>
+
+            <div class="filter-overlay"></div>
+
+            <div class="task-stats">
+                <div class="stat-item">
+                    <span class="stat-label">总任务:</span>
+                    <span class="stat-value" id="totalTasks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">已完成:</span>
+                    <span class="stat-value" id="completedTasks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">待处理:</span>
+                    <span class="stat-value" id="pendingTasks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">重要任务:</span>
+                    <span class="stat-value" id="importantTasks">0</span>
+                </div>
+            </div>
+
+            <ul id="TaskList"></ul>
+        </section>
+    </main>
+
+    <script src="task.js"></script>
+    <script>
+        // 所有筛选器相关逻辑已统一在task.js中处理
+    </script>
+<script>
+// 测试工具对象
+const TestUtils = {
+    // 检查元素可见性
+    isVisible: function(element) {
+        return element && (element.offsetParent !== null || getComputedStyle(element).display !== 'none');
+    },
+    
+    // 模拟移动端环境
+    simulateMobile: function() {
+        Object.defineProperty(window, 'innerWidth', {
+            writable: true,
+            configurable: true,
+            value: 375
+        });
+        window.dispatchEvent(new Event('resize'));
+    },
+    
+    // 恢复桌面环境
+    simulateDesktop: function() {
+        Object.defineProperty(window, 'innerWidth', {
+            writable: true,
+            configurable: true,
+            value: 1024
+        });
+        window.dispatchEvent(new Event('resize'));
+    },
+    
+    // 等待指定时间
+    wait: function(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    },
+    
+    // 清理测试状态
+    cleanup: function() {
+        const filterBtn = document.querySelector('.filter-main-btn');
+        const filterMenu = document.querySelector('.filter-menu');
+        const overlay = document.querySelector('.filter-overlay');
+        const submenus = document.querySelectorAll('.filter-submenu');
+        
+        filterBtn?.classList.remove('active');
+        filterMenu?.classList.remove('active');
+        overlay?.classList.remove('active');
+        submenus.forEach(submenu => submenu.classList.remove('active'));
+    }
+};
+
+// 测试用例
+async function runFilterTests() {
+    console.group('筛选器功能测试');
+    try {
+        // 初始状态测试
+        console.log('1. 测试初始状态...');
+        const filterBtn = document.querySelector('.filter-main-btn');
+        const filterMenu = document.querySelector('.filter-menu');
+        const overlay = document.querySelector('.filter-overlay');
+        
+        console.assert(!TestUtils.isVisible(filterMenu), '菜单初始应该是隐藏的');
+        console.assert(!TestUtils.isVisible(overlay), '遮罩层初始应该是隐藏的');
+        
+        // PC端测试
+        console.log('2. 测试PC端功能...');
+        TestUtils.simulateDesktop();
+        
+        // 测试按钮点击
+        filterBtn.click();
+        await TestUtils.wait(100);
+        console.assert(filterBtn.classList.contains('active'), '按钮应该有active类');
+        console.assert(TestUtils.isVisible(filterMenu), '菜单应该可见');
+        
+        // 测试子菜单
+        const firstSubmenuHeader = document.querySelector('.filter-item-header');
+        firstSubmenuHeader.dispatchEvent(new MouseEvent('mouseenter'));
+        await TestUtils.wait(100);
+        
+        const submenu = firstSubmenuHeader.nextElementSibling;
+        console.assert(TestUtils.isVisible(submenu), '子菜单应该在悬停时显示');
+        
+        // 测试选项点击
+        const filterOption = submenu.querySelector('.filter-btn');
+        filterOption.click();
+        await TestUtils.wait(100);
+        console.assert(filterOption.classList.contains('active'), '选项应该被激活');
+        
+        // 移动端测试
+        console.log('3. 测试移动端功能...');
+        TestUtils.simulateMobile();
+        await TestUtils.wait(300);
+        
+        TestUtils.cleanup();
+        await TestUtils.wait(300);
+        
+        // 测试移动端菜单
+        filterBtn.click();
+        await TestUtils.wait(100);
+        console.assert(filterMenu.classList.contains('active'), '移动端菜单应该显示');
+        console.assert(overlay.classList.contains('active'), '移动端遮罩层应该显示');
+        
+        // 测试移动端子菜单
+        firstSubmenuHeader.click();
+        await TestUtils.wait(100);
+        console.assert(submenu.classList.contains('active'), '移动端子菜单应该展开');
+        
+        // 测试移动端关闭
+        overlay.click();
+        await TestUtils.wait(300);
+        console.assert(!filterMenu.classList.contains('active'), '点击遮罩层应该关闭菜单');
+        
+        console.log('✅ 所有测试通过！');
+        
+    } catch (error) {
+        console.error('❌ 测试失败:', error);
+    } finally {
+        TestUtils.cleanup();
+        TestUtils.simulateDesktop();
+        console.groupEnd();
+    }
+}
+
+// 页面加载完成后运行测试
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('页面加载完成，准备测试...');
+    setTimeout(runFilterTests, 1000);
+});
+</script>
+    <footer>
+        <div class="footer-links">
+            <a href="blog.html">📝 个人博客</a>
+            <a href="about.html">ℹ️ 关于我们</a>
+        </div>
+    </footer>
+</body>
+</html>

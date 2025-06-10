@@ -1,0 +1,568 @@
+/* 任务管理页面特有样式 */
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* 筛选器样式 */
+.filter-wrapper {
+    display: inline-block;
+    position: relative;
+    margin: 20px 0;
+    z-index: 100;
+}
+
+.filter-container {
+    position: relative;
+}
+
+.filter-main-btn {
+    background: #1e90ff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.filter-main-btn:hover {
+    background: #1873cc;
+}
+
+.filter-menu {
+    display: none;
+    position: fixed !important;
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    margin: 0 !important;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    min-width: 200px;
+    z-index: 9999 !important;
+    overflow: hidden;
+    transform: translateY(100%);
+    transition: all 0.3s ease;
+    opacity: 1;
+}
+
+.filter-menu.active {
+    display: block !important;
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+}
+
+@media (min-width: 769px) {
+    .filter-menu {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: translateY(10px) !important;
+    }
+    
+    .filter-menu.active {
+        transform: translateY(0) !important;
+    }
+}
+
+.filter-menu.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.filter-menu.active {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+.filter-item {
+    position: relative;
+}
+
+.filter-item-header {
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-item-header:hover {
+    background-color: #f8f9fa;
+}
+
+.filter-item-header i:last-child {
+    margin-left: auto;
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+/* 子菜单基础样式 */
+.filter-submenu {
+    display: block !important;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    min-width: 280px;
+    max-width: 350px;
+    z-index: 1003;
+    opacity: 1;
+    transform: translateX(0);
+    padding: 12px 0;
+    border: 1px solid #eee;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+/* 强制显示用于调试 */
+.filter-item:hover .filter-submenu,
+.filter-submenu.active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.filter-submenu .filter-submenu {
+    left: 100%;
+    top: -12px;
+    z-index: 1004;
+}
+
+.filter-item:hover > .filter-submenu {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.filter-submenu .filter-btn {
+    white-space: nowrap;
+    text-align: left;
+    padding: 12px 20px;
+    line-height: 1.6;
+    min-width: 120px;
+}
+
+.filter-submenu .filter-btn[data-filter="high"],
+.filter-submenu .filter-btn[data-filter="medium"],
+.filter-submenu .filter-btn[data-filter="low"] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .filter-submenu {
+        min-width: 100%;
+        max-width: 100%;
+    }
+}
+
+.filter-submenu .filter-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 2px 0;
+}
+
+@media (max-width: 768px) {
+    .filter-submenu {
+        min-width: 100%;
+        padding: 15px 0;
+    }
+    
+    .filter-submenu .filter-btn {
+        padding: 14px 24px;
+    }
+}
+
+.filter-item:hover .filter-submenu {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(30, 144, 255, 0.2); }
+    70% { box-shadow: 0 0 0 8px rgba(30, 144, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(30, 144, 255, 0); }
+}
+
+.filter-item-header:hover {
+    background-color: #f8f9fa;
+    transform: translateX(2px);
+    transition: all 0.2s ease;
+}
+
+/* PC端悬停效果 */
+@media (min-width: 769px) {
+    .filter-item:hover .filter-submenu {
+        display: block;
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 移动端点击效果 */
+@media (max-width: 768px) {
+    .filter-submenu.active {
+        display: block;
+        opacity: 1;
+        transform: translateX(0);
+        left: 0;
+        top: 100%;
+        margin-top: 5px;
+    }
+}
+
+/* 子菜单项样式 */
+.filter-submenu .filter-btn {
+    display: block;
+    width: 100%;
+    padding: 8px 15px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.filter-submenu .filter-btn:hover {
+    background-color: #f5f5f5;
+}
+
+.filter-submenu .filter-btn.active {
+    background-color: #e6f2ff;
+    color: #1a73e8;
+}
+    top: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    min-width: 180px;
+    padding: 8px;
+}
+
+.filter-item:hover .filter-submenu {
+    display: block;
+    animation: slideIn 0.2s ease;
+}
+
+.filter-submenu .filter-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 15px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.filter-submenu .filter-btn:hover {
+    background: #f0f0f0;
+}
+
+.filter-submenu .filter-btn.active {
+    background: #e6f3ff;
+    color: #1e90ff;
+}
+
+.filter-submenu select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    background: white;
+}
+
+.filter-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.filter-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* 移动端才显示遮罩层 */
+@media (min-width: 769px) {
+    .filter-overlay {
+        display: none !important;
+    }
+}
+
+/* 导航栏样式 */
+.task-nav {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.nav-btn {
+    padding: 8px 16px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+    color: #666;
+}
+
+.nav-btn:hover {
+    background: #e0e0e0;
+}
+
+.nav-btn.active {
+    background: #1e90ff;
+    color: white;
+}
+
+/* 下拉菜单样式 */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    padding: 8px 16px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+    color: #666;
+}
+
+.dropbtn:hover {
+    background: #e0e0e0;
+}
+
+/* 从JS迁移的任务相关样式 */
+.empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: #666;
+}
+
+.empty-state i {
+    font-size: 48px;
+    color: #ddd;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.task-dates {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85em;
+    color: #666;
+    margin: 5px 0;
+}
+
+.created-date,
+.due-date {
+    padding: 3px 8px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.due-date.overdue {
+    color: #ff4444;
+    background-color: #ffeeee;
+}
+
+.edit-container {
+    gap: 15px;
+    padding: 12px;
+}
+
+.task-content {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.task-actions {
+    margin-left: auto;
+}
+
+.task-priority {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin-right: 8px;
+}
+
+.priority-high {
+    background-color: #ffe0e0;
+    color: #d63031;
+}
+
+.priority-medium {
+    background-color: #ffefd5;
+    color: #fd9644;
+}
+
+.priority-low {
+    background-color: #e0ffe0;
+    color: #00b894;
+}
+
+.task-category {
+    background-color: #e4e4e4;
+    color: #666;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin-right: 8px;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .task-dates {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.dropdown-content a:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .dropdown {
+        width: 100%;
+    }
+    
+    .dropdown-content {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+    }
+
+    .filter-menu {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+        margin: 0;
+        width: 100%;
+        max-height: 80vh;
+        border-radius: 15px 15px 0 0;
+        overflow-y: auto;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .filter-menu.active {
+        transform: translateY(0);
+    }
+
+    .filter-submenu {
+        position: static;
+        box-shadow: none;
+        padding-left: 35px;
+        display: none;
+    }
+
+    .filter-item-header i:last-child {
+        transform: rotate(90deg);
+    }
+
+    .filter-item:hover .filter-submenu {
+        display: none;
+    }
+
+    .filter-submenu.active {
+        display: block;
+    }
+
+    .task-nav {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .nav-btn, 
+    .filter-main-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

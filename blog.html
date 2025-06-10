@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>学习规划师</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客 - 我的个人站点</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
         /* 添加导航高亮样式 */
         .nav-active {
             background-color: rgba(255, 255, 255, 0.3) !important;
@@ -34,22 +34,21 @@
             <a href="travel.html">🚗 出行秘书</a></li>
             <a href="advisor.html">📊 战略顾问</a></li>
             <a href="discipline.html">🎯 纪律教练</a></li>
-            <a href="planner.html" class="nav-active">📘 学习规划师</a></li>
+            <a href="planner.html">📘 学习规划师</a></li>
             <a href="study-partner.html">🤝 学习伙伴</a></li>
             <a href="task.html">✅ 任务管理</a></li>
         </ul>
     </nav>
 
-  <main>
-    <section class="planner-section">
-      <h2>你想学习什么？</h2>
-      <input type="text" id="topicInput" placeholder="请输入主题，如：讲故事" />
-      <button onclick="generatePlan()">生成学习计划</button>
+    <main class="container">
+        <section class="section active">
+            <h1>博客</h1>
+            <div class="content-placeholder">
+                <p>博客功能正在开发中...</p>
+            </div>
+        </section>
+    </main>
 
-      <div id="planResult" class="plan-card"></div>
-    </section>
-  </main>
-
-  <script src="planner.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
