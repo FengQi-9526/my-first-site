@@ -1,9 +1,20 @@
 /* 任务管理页面特有样式 */
 
+:root {
+    --shadow-small: 0 4px 8px rgba(0, 0, 0, 0.2);
+    --border-radius-lg: 12px;
+}
+
 /* 动画效果 */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideIn {
@@ -21,6 +32,7 @@
 
 .filter-container {
     position: relative;
+    display: inline-block;
 }
 
 .filter-main-btn {
@@ -42,22 +54,36 @@
 }
 
 .filter-menu {
-    display: none;
-    position: fixed !important;
-    top: auto !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    margin: 0 !important;
+    position: absolute;
+    top: 100%;
+    left: 0;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    min-width: 200px;
-    z-index: 9999 !important;
-    overflow: hidden;
-    transform: translateY(100%);
-    transition: all 0.3s ease;
-    opacity: 1;
+    min-width: 250px;
+    z-index: 1000;
+    padding: 8px 0;
+    margin-top: 5px;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.filter-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.filter-menu::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.filter-menu::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.filter-menu::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .filter-menu.active {
@@ -94,15 +120,20 @@
 
 .filter-item {
     position: relative;
+    padding: 0;
 }
 
 .filter-item-header {
-    padding: 12px 15px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    padding: 10px 15px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.2s;
+}
+
+.filter-item-header span {
+    flex-grow: 1;
+    margin: 0 10px;
 }
 
 .filter-item-header:hover {
@@ -117,22 +148,16 @@
 
 /* 子菜单基础样式 */
 .filter-submenu {
-    display: block !important;
-    position: absolute;
-    left: 100%;
-    top: 0;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    min-width: 280px;
-    max-width: 350px;
-    z-index: 1003;
-    opacity: 1;
-    transform: translateX(0);
-    padding: 12px 0;
-    border: 1px solid #eee;
-    white-space: normal;
-    word-wrap: break-word;
+    display: none;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin: 0 8px;
+}
+
+.filter-item:hover .filter-submenu {
+    display: block;
+    animation: fadeIn 0.2s ease;
 }
 
 /* 强制显示用于调试 */
@@ -263,6 +288,7 @@
     background-color: #e6f2ff;
     color: #1a73e8;
 }
+.filter-submenu-item {
     top: 0;
     background: white;
     border-radius: 8px;
@@ -271,23 +297,37 @@
     padding: 8px;
 }
 
+
 .filter-item:hover .filter-submenu {
     display: block;
     animation: slideIn 0.2s ease;
 }
 
-.filter-submenu .filter-btn {
+.filter-btn {
     display: block;
     width: 100%;
-    text-align: left;
-    padding: 8px 15px;
+    padding: 8px 12px;
+    margin: 4px 0;
     border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 14px;
-    color: #333;
     border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    text-align: left;
     transition: all 0.2s;
+    color: #333;
+}
+
+.filter-btn:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+    color: #2d6bff;
+}
+
+.filter-btn.active {
+    background: #e6f0ff;
+    color: #2d6bff;
+    font-weight: 500;
+    border-left: 3px solid #2d6bff;
 }
 
 .filter-submenu .filter-btn:hover {
@@ -299,14 +339,16 @@
     color: #1e90ff;
 }
 
-.filter-submenu select {
+#categoryFilter {
     width: 100%;
-    padding: 8px 12px;
+    padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    background: white;
+    outline: none;
+}
+
+#categoryFilter:focus {
+    border-color: #007bff;
 }
 
 .filter-overlay {
@@ -334,7 +376,37 @@
     }
 }
 
-/* 导航栏样式 */
+</edit>
+
+<origin>
+/* 下拉菜单样式 */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dropbtn:hover {
+    background-color: white;
+    color: var(--primary-blue);
+    transform: scale(1.1);
+}
+</origin>
+<edit>
+
 .task-nav {
     display: flex;
     gap: 10px;
@@ -370,18 +442,23 @@
 }
 
 .dropbtn {
-    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 8px 15px;
     border: none;
-    background: #f0f0f0;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s;
-    font-size: 14px;
-    color: #666;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .dropbtn:hover {
-    background: #e0e0e0;
+    background-color: white;
+    color: var(--primary-blue);
+    transform: scale(1.1);
 }
 
 /* 从JS迁移的任务相关样式 */
@@ -478,44 +555,102 @@
     }
 }
 
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 160px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    border-radius: 4px;
-    z-index: 1;
-}
+</edit>
 
-.dropdown-content a {
-    color: #333;
-    padding: 8px 16px;
-    text-decoration: none;
-    display: block;
-    transition: background-color 0.3s;
-}
-
-.dropdown-content a:hover {
-    background-color: #f0f0f0;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-    animation: fadeIn 0.2s ease;
-}
-
-/* 移动端适配 */
+<origin>
 @media (max-width: 768px) {
+    .top-nav {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .top-nav ul {
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .top-nav a {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+    
+    .extra-nav {
+        margin-left: 0;
+        width: 100%;
+    }
+    
     .dropdown {
         width: 100%;
     }
     
-    .dropdown-content {
-        position: static;
+    .dropbtn {
         width: 100%;
-        box-shadow: none;
+        justify-content: center;
     }
+    
+    .dropdown-content {
+        width: 100%;
+        position: relative;
+        box-shadow: none;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+}
+</origin>
+<edit>
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .top-nav {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .top-nav ul {
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .top-nav a {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+    
+    .extra-nav {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .dropdown {
+        width: 100%;
+    }
+    
+    .dropbtn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .dropdown-content {
+        width: 100%;
+        position: relative;
+        box-shadow: none;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+}
 
     .filter-menu {
         position: fixed;
@@ -565,4 +700,3 @@
         width: 100%;
         justify-content: center;
     }
-}
