@@ -1,71 +1,60 @@
+// 地图初始化（确保 DOM 渲染后执行）
+let map = L.map('map').setView([31.2304, 121.4737], 12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+let startMarker;
+
+async function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(position => {
+      const {latitude: lat, longitude: lon} = position.coords;
+      map.setView([lat, lon], 14);
+      if (startMarker) map.removeLayer(startMarker);
+      startMarker = L.marker([lat, lon]).addTo(map).bindPopup("你在这里").openPopup();
+      document.getElementById('startLocation').value = `${lat.toFixed(5)},${lon.toFixed(5)}`;
+    }, () => alert("无法获取位置，检查权限"));
+  } else alert("该浏览器不支持定位");
+}
+
 async function getWeather() {
   const city = document.getElementById('city').value.trim();
-  const apiKey = '3823d604764f436f84846255a290ff88'; // 替换为你自己申请的 key
+  const apiKey = '3823d604764f436f84846255a290ff88';
+  if (!city) return alert("请输入城市");
 
-  if (!city) {
-    alert("请输入城市名称");
-    return;
-  }
-
-  const locationApi = `https://geoapi.qweather.com/v2/city/lookup?location=${city}&key=${apiKey}`;
   try {
-    // 第一步：获取城市ID（location）
-    const locationRes = await fetch(locationApi);
-    const locationData = await locationRes.json();
-
-    if (locationData.code !== "200" || locationData.location.length === 0) {
-      alert("城市名称无效，请重新输入");
-      return;
+    const locRes = await fetch(`https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(city)}&key=${apiKey}`);
+    const locData = await locRes.json();
+    if (locData.code !== '200' || locData.location.length === 0) {
+      return alert("未找到该城市，请确认名称");
     }
+    const locId = locData.location[0].id;
 
-    const locationId = locationData.location[0].id;
-
-    // 第二步：获取天气信息
-    const weatherApi = `https://devapi.qweather.com/v7/weather/now?location=${locationId}&key=${apiKey}`;
-    const weatherRes = await fetch(weatherApi);
+    const weatherRes = await fetch(`https://devapi.qweather.com/v7/weather/now?location=${locId}&key=${apiKey}`);
     const weatherData = await weatherRes.json();
-
-    if (weatherData.code !== "200") {
-      alert("天气信息获取失败");
-      return;
+    if (weatherData.code !== '200') {
+      console.error(weatherData);
+      return alert("天气查询失败：" + weatherData.code);
     }
 
-    const weather = weatherData.now;
-    const temp = weather.temp;
-    const condition = weather.text;
-    const icon = weather.icon;
-
-    const advice = giveClothingAdvice(condition, temp);
-
+    const {temp, text: condition, icon} = weatherData.now;
     document.getElementById('weatherInfo').innerHTML = `
       <p><strong>城市：</strong>${city}</p>
       <p><strong>温度：</strong>${temp}°C</p>
       <p><strong>天气：</strong>${condition}</p>
-      <img src="https://qweather-pic.oss-cn-beijing.aliyuncs.com/icons/${icon}.png" alt="天气图标" />
-      <p><strong>建议：</strong>${advice}</p>
+      <img src="https://qweather-pic.oss-cn-beijing.aliyuncs.com/icons/${icon}.png" alt="图标" />
+      <p><strong>建议：</strong>${giveAdvice(condition, temp)}</p>
     `;
-  } catch (error) {
-    console.error("发生错误：", error);
-    alert("获取天气失败，请稍后再试");
+  } catch (e) {
+    console.error(e);
+    alert("获取天气出错");
   }
 }
 
-function giveClothingAdvice(condition, temp) {
-  let advice = '';
-
-  if (temp < 10) {
-    advice += '天气寒冷，请穿厚外套。';
-  } else if (temp < 20) {
-    advice += '稍凉，建议穿长袖加外套。';
-  } else {
-    advice += '天气温暖，适合穿短袖。';
-  }
-
-  if (condition.includes('雨') || condition.includes('雪') || condition.includes('阴')) {
-    advice += ' 记得带伞哦！';
-  } else {
-    advice += ' 今天不需要带伞。';
-  }
-
+function giveAdvice(cond, temp) {
+  let advice = temp < 10 ? '天气冷，请保暖。' :
+               temp < 20 ? '微凉，穿外套比较好。' :
+               '天气暖，轻装上阵。';
+  if (/雨|雪|阴/.test(cond)) advice += ' 带伞哦！';
   return advice;
 }
