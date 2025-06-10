@@ -1,84 +1,59 @@
-let map;
-let currentRoute;
+// API配置
+const WEATHER_API_KEY = '3823d604764f436f84846255a290ff88';
+const WEATHER_API_URL = 'https://devapi.qweather.com/v7/weather/now';
 
-function initMap() {
-    map = new AMap.Map('mapContainer', {
-        resizeEnable: true,
-        center: [116.397428, 39.90923],  // 设置地图中心点
-        zoom: 10,
-    });
-}
-
-function updateTravelMode(mode) {
-    // 当前的旅行模式更新逻辑保持不变，选择不同的路线规划
-}
-
-function getRoute() {
-    let from = document.getElementById('fromLocation').value;
-    let to = document.getElementById('toLocation').value;
-
-    if (!from || !to) {
-        alert('请输入起点和终点');
+// 获取天气数据
+async function getWeather() {
+    const city = document.getElementById('city').value;
+    if (!city) {
+        alert('请输入城市名称');
         return;
     }
 
-    let fromGeo = new AMap.Geocoder();
-    let toGeo = new AMap.Geocoder();
+    try {
+        const response = await fetch(`${WEATHER_API_URL}?location=${city}&key=${WEATHER_API_KEY}`);
+        const data = await response.json();
+        
+        if (data.code === '200') {
+            const weather = data.now;
+            const weatherInfo = `
+                <p><strong>城市：</strong>${city}</p>
+                <p><strong>温度：</strong>${weather.temp}°C</p>
+                <p><strong>天气：</strong>${weather.text}</p>
+                <img src="https://qweather-pic.oss-cn-beijing.aliyuncs.com/${weather.icon}.png" alt="天气图标" />
+            `;
 
-    fromGeo.getLocation(from, function(status, result) {
-        if (status === 'complete' && result.geocodes.length) {
-            let startPoint = result.geocodes[0].location;
-            toGeo.getLocation(to, function(status, result) {
-                if (status === 'complete' && result.geocodes.length) {
-                    let endPoint = result.geocodes[0].location;
-                    // 获取路径
-                    requestRoute(startPoint, endPoint);
-                }
-            });
+            // 生成穿搭建议
+            const advice = giveClothingAdvice(weather.text, weather.temp);
+            document.getElementById('weatherInfo').innerHTML = weatherInfo + `<p><strong>穿搭建议：</strong>${advice}</p>`;
+        } else {
+            alert('获取天气失败，请检查城市名称或稍后重试');
         }
-    });
+    } catch (error) {
+        console.error('天气查询出错:', error);
+        alert('发生错误，请稍后再试');
+    }
 }
 
-// 请求路线规划数据
-function requestRoute(startPoint, endPoint) {
-    let url = `https://restapi.amap.com/v3/direction/driving?key=YOUR_API_KEY&origin=${startPoint.lng},${startPoint.lat}&destination=${endPoint.lng},${endPoint.lat}&extensions=all`;
+// 生成穿搭建议
+function giveClothingAdvice(condition, temp) {
+    let advice = '';
+    
+    // 温度建议
+    if (temp < 10) {
+        advice += '穿上厚外套，保暖！';
+    } else if (temp >= 10 && temp < 20) {
+        advice += '穿上长袖和外套，适合稍微寒冷的天气。';
+    } else {
+        advice += '天气温暖，穿轻便的衣服。';
+    }
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === '1' && data.route && data.route.paths.length > 0) {
-                let path = data.route.paths[0];
-                let polyline = path.steps.map(step => step.polyline).join('|');
-                let points = polyline.split('|').map(p => p.split(',').map(Number));
+    // 天气建议
+    if (condition.includes('雨') || condition.includes('雪')) {
+        advice += ' 记得带伞哦！';
+    } else {
+        advice += ' 今天不需要带伞。';
+    }
 
-                // 绘制路线
-                let line = new AMap.Polyline({
-                    path: points,
-                    strokeColor: '#0091ff',
-                    strokeWeight: 5,
-                    strokeOpacity: 0.7,
-                });
-                line.setMap(map);
-                map.setFitView();
-            } else {
-                alert('未找到路线');
-            }
-        })
-        .catch(error => {
-            console.error('获取路线失败：', error);
-            alert('获取路线失败');
-        });
+    return advice;
 }
-
-window.onload = function() {
-    initMap();
-
-    let buttons = document.querySelectorAll('.transport-options button');
-    buttons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            updateTravelMode(event.target.textContent.toLowerCase());
-        });
-    });
-
-    document.getElementById('getRouteButton').addEventListener('click', getRoute);
-};
